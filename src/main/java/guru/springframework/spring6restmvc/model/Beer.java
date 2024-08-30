@@ -18,6 +18,6 @@ public class Beer {
     private String upc;
     private Integer quantityOnHand;
     private BigDecimal price;
-    private LocalDate createDate;
-    private LocalDate updateDate;
+    private LocalDate createdDate;
+    private LocalDate updatedDate;
 }
