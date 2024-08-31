@@ -2,11 +2,10 @@ package guru.springframework.spring6restmvc.controller;
 
 import guru.springframework.spring6restmvc.model.Beer;
 import guru.springframework.spring6restmvc.service.BeerService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,9 +21,11 @@ public class BeerController {
 
     @PostMapping
 //    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity handlePost(@RequestBody Beer beer) {
+    public ResponseEntity handlePost(@RequestBody Beer beer, HttpServletRequest request) {
         Beer savedBeer = beerService.saveBeer(beer);
-        return new ResponseEntity(HttpStatus.CREATED);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", request.getRequestURI() + "/" + savedBeer.getId());
+        return new ResponseEntity(headers,HttpStatus.CREATED);
     }
 
     @RequestMapping(method = RequestMethod.GET)
