@@ -38,4 +38,11 @@ public class BeerController {
         log.debug("Get Beer by Id - in controller - 123456");
         return beerService.getBeerById(beerId);
     }
+
+    @PutMapping(value = "/{beerId}")
+    public ResponseEntity updateBeerById(@PathVariable(value = "beerId") UUID beerId, @RequestBody Beer beer) {
+        Beer updatedBeer = beerService.updateBeerById(beerId, beer);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }
