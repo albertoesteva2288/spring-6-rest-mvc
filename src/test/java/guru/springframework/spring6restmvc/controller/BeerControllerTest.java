@@ -1,5 +1,6 @@
 package guru.springframework.spring6restmvc.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springframework.spring6restmvc.model.Beer;
 import guru.springframework.spring6restmvc.service.BeerService;
 import guru.springframework.spring6restmvc.service.BeerServiceImpl;
@@ -31,6 +32,9 @@ class BeerControllerTest {
     @MockBean
     BeerService beerService;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     BeerServiceImpl beerServiceImpl = new BeerServiceImpl();
 
     @Test
@@ -61,6 +65,23 @@ class BeerControllerTest {
                 // it can be set as beerServiceImpl.listBeers()beerServiceImpl.listBeers().size() instead of that to make it dynamic
 
         ;
+    }
+
+    @Test
+    void createNewBeer() throws Exception {
+    //        // ObjectMapper from Jackson
+    //        ObjectMapper objectMapper = new ObjectMapper();
+    //        // When is tried to print beer using objectMapper.writeValueAsString
+    //        // The test fails because don't recognize the createdDate and updatedDate in Beer
+    //        // That's why is used the following instruccion
+    //        objectMapper.findAndRegisterModules();
+    //        // With this the test passes but the date is not displayed in an expected format
+    //        // So its used the ObjectMapper managed by Spring Boot
+
+
+        Beer beer = beerServiceImpl.listBeers().get(0);
+        System.out.println(objectMapper.writeValueAsString(beer));
+
     }
 
 }
