@@ -12,6 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 
+import java.time.LocalDate;
+import java.util.UUID;
+
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -69,22 +72,37 @@ class BeerControllerTest {
     @Test
     void createNewBeer() throws Exception {
         // 1 Getting a Beer just get something to return
-        Beer beer = beerServiceImpl.listBeers().get(0);
+        Beer createdBeer = beerServiceImpl.listBeers().get(0);
+        System.out.println(createdBeer);
         // Simulation that id is null just for "save"
-        beer.setVersion(null);
-        beer.setId(null);
+        Beer newBeer =  Beer.builder()
+                .id(null)
+                .version(null)
+                .beerName(createdBeer.getBeerName())
+                .beerStyle(createdBeer.getBeerStyle())
+                .upc(createdBeer.getUpc())
+                .price(createdBeer.getPrice())
+                .quantityOnHand(createdBeer.getQuantityOnHand())
+                .createdDate(createdBeer.getCreatedDate())
+                .updatedDate(createdBeer.getUpdatedDate())
+                .build();
+
+
+        System.out.println(newBeer);
         // 2 Setting the result we want
-        given(beerService.saveBeer(beer)).willReturn(beerServiceImpl.listBeers().get(0));
+
+        given(beerService.saveBeer(newBeer)).willReturn(createdBeer);
 
         // 3 Simulating the post request to create the beer and the kind of response
         mockMvc.perform(post("/api/v1/beer")
                 .accept(MediaType.APPLICATION_JSON) // The response we expect is a Json
                     .contentType(MediaType.APPLICATION_JSON) // The request has body of json format
-                    .content(objectMapper.writeValueAsString(beer))) // Conver beer to a json and setted in body request
+                    .content(objectMapper.writeValueAsString(newBeer))) // Convert beer to a json and setted in body request
                 .andExpect(status().isCreated()) // It's expected and HTTP Code 201 = Created in the response
                 .andExpect(header().exists("Location")) // It's expected the Location header in response
-                .andExpect(header().string("Location", containsString("/api/v1/beer/" + beer.getId())));
+                .andExpect(header().string("Location", containsString("/api/v1/beer/" + createdBeer.getId())));
                 // chatgpt suggestion, validate that Location has the correct url
+        System.out.println("/api/v1/beer/" + createdBeer.getId());
 
     }
 
