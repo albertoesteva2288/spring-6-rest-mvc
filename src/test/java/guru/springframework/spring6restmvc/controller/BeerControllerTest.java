@@ -13,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.List;
+
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -38,12 +40,27 @@ class BeerControllerTest {
 
         mockMvc.perform(get("/api/v1/beer/" + testBeer.getId())
                 .accept(MediaType.APPLICATION_JSON)) // Setting that the request accept a Json
-                .andExpect(status().isOk()) // Setting the response Status Ok for all responses
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))// Setting a body type Json for the ResponseEntity
-                //.andExpect(jsonPath("$.id").value(testBeer.getId().toString())) // This is a way to verify if the id of request is equals to id of testBeer
-                .andExpect(jsonPath("$.id", is(testBeer.getId().toString())))// This other way of verify the beer id
-                .andExpect(jsonPath("$.beerName",is(testBeer.getBeerName()))) // Verify that beerName in json is equals to testBeer.getBeerName()                                                                                              //According to chatgpt this is a better option to make the comparison
+                    .andExpect(status().isOk()) // Setting the response Status Ok for all responses
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))// Setting a body type Json for the ResponseEntity
+                    //.andExpect(jsonPath("$.id").value(testBeer.getId().toString())) // This is a way to verify if the id of request is equals to id of testBeer
+                    .andExpect(jsonPath("$.id", is(testBeer.getId().toString())))// This other way of verify the beer id
+                    .andExpect(jsonPath("$.beerName",is(testBeer.getBeerName()))) // Verify that beerName in json is equals to testBeer.getBeerName()
+// According to chatgpt this is a better option to make the comparison
         ;
 
     }
+
+    @Test
+    void testListBeers() throws Exception {
+        given(beerService.listBeers()).willReturn(beerServiceImpl.listBeers());
+        mockMvc.perform(get("/api/v1/beer")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()",is(3)))// Validation of json length  of list is 3,
+                // it can be set as beerServiceImpl.listBeers()beerServiceImpl.listBeers().size() instead of that to make it dynamic
+
+        ;
+    }
+
 }
