@@ -6,6 +6,7 @@ import guru.springframework.spring6restmvc.service.CustomerService;
 import guru.springframework.spring6restmvc.service.CustomerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.jupiter.api.Assertions.*;
@@ -112,5 +114,17 @@ class CustomerControllerTest {
                 .andExpect(status().isNoContent());
 
         verify(customerService).updateCustomerById(any(UUID.class), any(Customer.class));
+    }
+    @Test
+    void deleteCustomer() throws Exception {
+        Customer customer = customerServiceImpl.listCustomers().get(0);
+
+        mockMvc.perform(delete("/api/v1/customer/" + customer.getId())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+        ArgumentCaptor<UUID> uuidArgumentCaptor = ArgumentCaptor.forClass(UUID.class);
+        verify(customerService).deleteById(uuidArgumentCaptor.capture());
+        assertThat(customer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
     }
 }
