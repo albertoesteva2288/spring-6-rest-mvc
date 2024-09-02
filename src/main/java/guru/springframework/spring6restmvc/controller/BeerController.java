@@ -16,7 +16,7 @@ import java.util.UUID;
 public class BeerController {
 
     public static final String BEER_PATH = "/api/v1/beer";
-    public static final String BEER_PATH_ID = "/{beerId}";
+    public static final String BEER_PATH_ID = BEER_PATH + "/{beerId}";
 
     private final BeerService beerService;
 
@@ -24,7 +24,7 @@ public class BeerController {
     public ResponseEntity createNewBeer(@RequestBody Beer beer) {
         Beer savedBeer = beerService.saveBeer(beer);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", BEER_PATH + savedBeer.getId());
+        headers.add("Location", BEER_PATH + "/" + savedBeer.getId());
         return new ResponseEntity(headers,HttpStatus.CREATED);
     }
 
@@ -33,26 +33,26 @@ public class BeerController {
         return beerService.listBeers();
     }
 
-    @GetMapping(value = BEER_PATH + BEER_PATH_ID)
+    @GetMapping(value = BEER_PATH_ID)
     public Beer getBeerById(@PathVariable(value = "beerId") UUID beerId) {
         log.debug("Get Beer by Id - in controller - 123456");
         return beerService.getBeerById(beerId);
     }
 
-    @PutMapping(value = BEER_PATH + BEER_PATH_ID)
+    @PutMapping(value = BEER_PATH_ID)
     public ResponseEntity updateBeerById(@PathVariable(value = "beerId") UUID beerId, @RequestBody Beer beer) {
         Beer updatedBeer = beerService.updateBeerById(beerId, beer);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping(value = BEER_PATH + BEER_PATH_ID)
+    @DeleteMapping(value = BEER_PATH_ID)
     public ResponseEntity deleteBeerById(@PathVariable(value = "beerId") UUID beerId) {
         beerService.deleteById(beerId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @PatchMapping(value = BEER_PATH + BEER_PATH_ID)
+    @PatchMapping(value = BEER_PATH_ID)
     public ResponseEntity updaPatcheBeerById(@PathVariable(value = "beerId") UUID beerId, @RequestBody Beer beer) {
         Beer updatedBeer = beerService.updatePatchBeerById(beerId, beer);
 
