@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -59,7 +60,7 @@ class BeerControllerTest {
     @Test
     void getBeerById() throws Exception {
         Beer testBeer = beerServiceImpl.listBeers().get(0);
-        given(beerService.getBeerById(testBeer.getId())).willReturn(testBeer);
+        given(beerService.getBeerById(testBeer.getId())).willReturn(Optional.of(testBeer));
 
         mockMvc.perform(get(BeerController.BEER_PATH_ID, testBeer.getId())
                 .accept(MediaType.APPLICATION_JSON)) // Setting that the request accept a Json
@@ -112,7 +113,7 @@ class BeerControllerTest {
         mockMvc.perform(post(BeerController.BEER_PATH)
                 .accept(MediaType.APPLICATION_JSON) // The response we expect is a Json
                     .contentType(MediaType.APPLICATION_JSON) // The request has body of json format
-                    .content(objectMapper.writeValueAsString(newBeer))) // Convert beer to a json and setted in body request
+                    .content(objectMapper.writeValueAsString(newBeer))) // Convert beer to a json and set in body request
                 .andExpect(status().isCreated()) // It's expected and HTTP Code 201 = Created in the response
                 .andExpect(header().exists("Location")) // It's expected the Location header in response
                 .andExpect(header().string("Location", containsString(BeerController.BEER_PATH + "/" + createdBeer.getId())));
@@ -128,7 +129,7 @@ class BeerControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(beer)))
-                .andExpect(status().isNoContent()); // set a HTTP status 204 = NO CONTENT
+                .andExpect(status().isNoContent()); // set an HTTP status 204 = NO CONTENT
         verify(beerService).updateBeerById(any(UUID.class), any(Beer.class));
     }
 
@@ -166,7 +167,7 @@ class BeerControllerTest {
 
     @Test
     void getBeerByIdNotFound() throws Exception {
-        given(beerService.getBeerById(any(UUID.class))).willThrow(NotFoundException.class);
+        given(beerService.getBeerById(any(UUID.class))).willReturn(Optional.empty());
         mockMvc.perform(get(BeerController.BEER_PATH_ID, UUID.randomUUID()))
                 .andExpect(status().isNotFound());
     }
