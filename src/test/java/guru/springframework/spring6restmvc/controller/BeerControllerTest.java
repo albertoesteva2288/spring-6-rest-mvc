@@ -61,7 +61,7 @@ class BeerControllerTest {
         Beer testBeer = beerServiceImpl.listBeers().get(0);
         given(beerService.getBeerById(testBeer.getId())).willReturn(testBeer);
 
-        mockMvc.perform(get("/api/v1/beer/" + testBeer.getId())
+        mockMvc.perform(get(BeerController.BEER_PATH + "/" + testBeer.getId())
                 .accept(MediaType.APPLICATION_JSON)) // Setting that the request accept a Json
                     .andExpect(status().isOk()) // Setting the response Status Ok for all responses
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))// Setting a body type Json for the ResponseEntity
@@ -127,7 +127,7 @@ class BeerControllerTest {
     void updateBeer()throws Exception{
         Beer beer = beerServiceImpl.listBeers().get(0);
 
-        mockMvc.perform(put(BeerController.BEER_PATH + beer.getId())
+        mockMvc.perform(put(BeerController.BEER_PATH + "/" + beer.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(beer)))
@@ -139,7 +139,7 @@ class BeerControllerTest {
     void deleteBeer()throws Exception{
         Beer beer = beerServiceImpl.listBeers().get(0);
 
-        mockMvc.perform(delete(BeerController.BEER_PATH + beer.getId())
+        mockMvc.perform(delete(BeerController.BEER_PATH + "/" + beer.getId())
                 .accept(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isNoContent());
@@ -156,7 +156,7 @@ class BeerControllerTest {
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name");
 
-        mockMvc.perform(patch(BeerController.BEER_PATH + beer.getId())
+        mockMvc.perform(patch(BeerController.BEER_PATH + "/" + beer.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerMap)))
