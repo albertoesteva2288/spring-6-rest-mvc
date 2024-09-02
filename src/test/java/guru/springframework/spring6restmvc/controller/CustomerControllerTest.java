@@ -97,7 +97,7 @@ class CustomerControllerTest {
         // 2 Setting the result we want
         given(customerService.saveCustomer(newCustomer)).willReturn(createdCustomer);
 
-        // 3 Simulating the post request to create the beer and the kind of response
+        // 3 Simulating the post request to create the customer and the kind of response
         mockMvc.perform(post(CustomerController.CUSTOMER_PATH)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -149,5 +149,12 @@ class CustomerControllerTest {
         assertThat(customer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
         assertThat(customerMap.get("customerName")).isEqualTo(customerArgumentCaptor.getValue().getCustomerName());
 
+    }
+
+    @Test
+    void getCustomerByIdNotFound() throws Exception {
+        given(customerService.getCustomerById(any(UUID.class))).willThrow(NotFoundException.class);
+        mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID, UUID.randomUUID()))
+                .andExpect(status().isNotFound());
     }
 }
