@@ -76,7 +76,7 @@ class BeerControllerTest {
     @Test
     void testListBeers() throws Exception {
         given(beerService.listBeers()).willReturn(beerServiceImpl.listBeers());
-        mockMvc.perform(get("/api/v1/beer")
+        mockMvc.perform(get(BeerController.BEER_PATH)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -111,15 +111,15 @@ class BeerControllerTest {
         given(beerService.saveBeer(newBeer)).willReturn(createdBeer);
 
         // 3 Simulating the post request to create the beer and the kind of response
-        mockMvc.perform(post("/api/v1/beer")
+        mockMvc.perform(post(BeerController.BEER_PATH)
                 .accept(MediaType.APPLICATION_JSON) // The response we expect is a Json
                     .contentType(MediaType.APPLICATION_JSON) // The request has body of json format
                     .content(objectMapper.writeValueAsString(newBeer))) // Convert beer to a json and setted in body request
                 .andExpect(status().isCreated()) // It's expected and HTTP Code 201 = Created in the response
                 .andExpect(header().exists("Location")) // It's expected the Location header in response
-                .andExpect(header().string("Location", containsString("/api/v1/beer/" + createdBeer.getId())));
+                .andExpect(header().string("Location", containsString(BeerController.BEER_PATH + createdBeer.getId())));
                 // chatgpt suggestion, validate that Location has the correct url
-        System.out.println("/api/v1/beer/" + createdBeer.getId());
+        System.out.println(BeerController.BEER_PATH + createdBeer.getId());
 
     }
 
@@ -127,7 +127,7 @@ class BeerControllerTest {
     void updateBeer()throws Exception{
         Beer beer = beerServiceImpl.listBeers().get(0);
 
-        mockMvc.perform(put("/api/v1/beer/" + beer.getId())
+        mockMvc.perform(put(BeerController.BEER_PATH + beer.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(beer)))
@@ -139,7 +139,7 @@ class BeerControllerTest {
     void deleteBeer()throws Exception{
         Beer beer = beerServiceImpl.listBeers().get(0);
 
-        mockMvc.perform(delete("/api/v1/beer/" + beer.getId())
+        mockMvc.perform(delete(BeerController.BEER_PATH + beer.getId())
                 .accept(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isNoContent());
@@ -156,7 +156,7 @@ class BeerControllerTest {
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name");
 
-        mockMvc.perform(patch("/api/v1/beer/" + beer.getId())
+        mockMvc.perform(patch(BeerController.BEER_PATH + beer.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerMap)))
