@@ -1,9 +1,8 @@
 package guru.springframework.spring6restmvc.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -17,6 +16,11 @@ import java.util.UUID;
 
 public class Customer {
     @Id
+    @GeneratedValue(generator = "UUID")
+    //@GenericGenerator(name = "UUID" , strategy = "org.hibernate.id.UUIDGenerator")
+    // Strategy was mark as deprecated, I modified the code of course to the next
+    @UuidGenerator
+    @Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
     private UUID id;
     private String customerName;
     @Version
