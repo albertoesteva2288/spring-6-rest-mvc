@@ -20,7 +20,7 @@ public class BeerServiceImpl implements BeerService {
     public BeerServiceImpl() {
         beerMap = new HashMap<>();
 
-        BeerDTO beerDTO1 = BeerDTO.builder()
+        BeerDTO beer1 = BeerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .beerName("Galaxy Cat")
@@ -32,7 +32,7 @@ public class BeerServiceImpl implements BeerService {
                 .updatedDate(LocalDate.now())
                 .build();
 
-        BeerDTO beerDTO2 = BeerDTO.builder()
+        BeerDTO beer2 = BeerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .beerName("Crank")
@@ -44,7 +44,7 @@ public class BeerServiceImpl implements BeerService {
                 .updatedDate(LocalDate.now())
                 .build();
 
-        BeerDTO beerDTO3 = BeerDTO.builder()
+        BeerDTO beer3 = BeerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .beerName("Sunshine City")
@@ -56,9 +56,9 @@ public class BeerServiceImpl implements BeerService {
                 .updatedDate(LocalDate.now())
                 .build();
 
-        beerMap.put(beerDTO1.getId(), beerDTO1);
-        beerMap.put(beerDTO2.getId(), beerDTO2);
-        beerMap.put(beerDTO3.getId(), beerDTO3);
+        beerMap.put(beer1.getId(), beer1);
+        beerMap.put(beer2.getId(), beer2);
+        beerMap.put(beer3.getId(), beer3);
     }
 
     @Override
@@ -73,35 +73,35 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public BeerDTO saveBeer(BeerDTO beerDTO) {
-        BeerDTO mockBeerDTO = BeerDTO.builder()
+    public BeerDTO saveBeer(BeerDTO beer) {
+        BeerDTO mockBeer = BeerDTO.builder()
                 .id(UUID.randomUUID())
-                .version(beerDTO.getVersion())
-                .beerName(beerDTO.getBeerName())
-                .beerStyle(beerDTO.getBeerStyle())
-                .upc(beerDTO.getUpc())
-                .price(beerDTO.getPrice())
-                .quantityOnHand(beerDTO.getQuantityOnHand())
+                .version(beer.getVersion())
+                .beerName(beer.getBeerName())
+                .beerStyle(beer.getBeerStyle())
+                .upc(beer.getUpc())
+                .price(beer.getPrice())
+                .quantityOnHand(beer.getQuantityOnHand())
                 .createdDate(LocalDate.now())
                 .updatedDate(LocalDate.now())
                 .build();
-        beerMap.put(mockBeerDTO.getId(), mockBeerDTO);
-        return mockBeerDTO;
+        beerMap.put(mockBeer.getId(), mockBeer);
+        return mockBeer;
     }
 
     @Override
-    public BeerDTO updateBeerById(UUID beerId, BeerDTO beerDTO) {
-    BeerDTO savedBeerDTO = beerMap.get(beerId);
-    savedBeerDTO.setVersion(beerDTO.getVersion());
-    savedBeerDTO.setBeerName(beerDTO.getBeerName());
-    savedBeerDTO.setBeerStyle(beerDTO.getBeerStyle());
-    savedBeerDTO.setUpc(beerDTO.getUpc());
-    savedBeerDTO.setQuantityOnHand(beerDTO.getQuantityOnHand());
-    savedBeerDTO.setPrice(beerDTO.getPrice());
+    public BeerDTO updateBeerById(UUID beerId, BeerDTO beer) {
+    BeerDTO savedBeer = beerMap.get(beerId);
+    savedBeer.setVersion(beer.getVersion());
+    savedBeer.setBeerName(beer.getBeerName());
+    savedBeer.setBeerStyle(beer.getBeerStyle());
+    savedBeer.setUpc(beer.getUpc());
+    savedBeer.setQuantityOnHand(beer.getQuantityOnHand());
+    savedBeer.setPrice(beer.getPrice());
 
-    savedBeerDTO.setUpdatedDate(LocalDate.now());
+    savedBeer.setUpdatedDate(LocalDate.now());
 
-    return savedBeerDTO;
+    return savedBeer;
 
     }
 
@@ -111,29 +111,29 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public BeerDTO updatePatchBeerById(UUID beerId, BeerDTO beerDTO) {
+    public BeerDTO updatePatchBeerById(UUID beerId, BeerDTO beer) {
         BeerDTO existing = beerMap.get(beerId);
 
-        if(beerDTO.getVersion() != null){
-            existing.setVersion(beerDTO.getVersion());
+        if(beer.getVersion() != null){
+            existing.setVersion(beer.getVersion());
         }
 
-        if(StringUtils.hasText(beerDTO.getBeerName())){
-            existing.setBeerName(beerDTO.getBeerName());
+        if(StringUtils.hasText(beer.getBeerName())){
+            existing.setBeerName(beer.getBeerName());
         }
-        if(beerDTO.getBeerStyle() != null){
-            existing.setBeerStyle(beerDTO.getBeerStyle());
+        if(beer.getBeerStyle() != null){
+            existing.setBeerStyle(beer.getBeerStyle());
         }
-        if(StringUtils.hasText(beerDTO.getUpc())){
-            existing.setUpc(beerDTO.getUpc());
-        }
-
-        if(beerDTO.getQuantityOnHand() != null){
-            existing.setQuantityOnHand(beerDTO.getQuantityOnHand());
+        if(StringUtils.hasText(beer.getUpc())){
+            existing.setUpc(beer.getUpc());
         }
 
-        if(beerDTO.getPrice() != null){
-            existing.setPrice(beerDTO.getPrice());
+        if(beer.getQuantityOnHand() != null){
+            existing.setQuantityOnHand(beer.getQuantityOnHand());
+        }
+
+        if(beer.getPrice() != null){
+            existing.setPrice(beer.getPrice());
         }
 
         existing.setUpdatedDate(LocalDate.now());

@@ -21,10 +21,10 @@ public class BeerController {
     private final BeerService beerService;
 
     @PostMapping(value = BEER_PATH)
-    public ResponseEntity createNewBeer(@RequestBody BeerDTO beerDTO) {
-        BeerDTO savedBeerDTO = beerService.saveBeer(beerDTO);
+    public ResponseEntity createNewBeer(@RequestBody BeerDTO beer) {
+        BeerDTO savedBeer = beerService.saveBeer(beer);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", BEER_PATH + "/" + savedBeerDTO.getId());
+        headers.add("Location", BEER_PATH + "/" + savedBeer.getId());
         return new ResponseEntity(headers,HttpStatus.CREATED);
     }
 
@@ -40,8 +40,8 @@ public class BeerController {
     }
 
     @PutMapping(value = BEER_PATH_ID)
-    public ResponseEntity updateBeerById(@PathVariable(value = "beerId") UUID beerId, @RequestBody BeerDTO beerDTO) {
-        BeerDTO updatedBeerDTO = beerService.updateBeerById(beerId, beerDTO);
+    public ResponseEntity updateBeerById(@PathVariable(value = "beerId") UUID beerId, @RequestBody BeerDTO beer) {
+        BeerDTO updatedBeer = beerService.updateBeerById(beerId, beer);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
@@ -53,8 +53,8 @@ public class BeerController {
     }
 
     @PatchMapping(value = BEER_PATH_ID)
-    public ResponseEntity updaPatcheBeerById(@PathVariable(value = "beerId") UUID beerId, @RequestBody BeerDTO beerDTO) {
-        BeerDTO updatedBeerDTO = beerService.updatePatchBeerById(beerId, beerDTO);
+    public ResponseEntity updaPatcheBeerById(@PathVariable(value = "beerId") UUID beerId, @RequestBody BeerDTO beer) {
+        BeerDTO updatedBeer = beerService.updatePatchBeerById(beerId, beer);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

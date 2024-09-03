@@ -58,16 +58,16 @@ class BeerControllerTest {
 
     @Test
     void getBeerById() throws Exception {
-        BeerDTO testBeerDTO = beerServiceImpl.listBeers().get(0);
-        given(beerService.getBeerById(testBeerDTO.getId())).willReturn(Optional.of(testBeerDTO));
+        BeerDTO testBeer = beerServiceImpl.listBeers().get(0);
+        given(beerService.getBeerById(testBeer.getId())).willReturn(Optional.of(testBeer));
 
-        mockMvc.perform(get(BeerController.BEER_PATH_ID, testBeerDTO.getId())
+        mockMvc.perform(get(BeerController.BEER_PATH_ID, testBeer.getId())
                 .accept(MediaType.APPLICATION_JSON)) // Setting that the request accept a Json
                     .andExpect(status().isOk()) // Setting the response Status Ok for all responses
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))// Setting a body type Json for the ResponseEntity
                     //.andExpect(jsonPath("$.id").value(testBeer.getId().toString())) // This is a way to verify if the id of request is equals to id of testBeer
-                    .andExpect(jsonPath("$.id", is(testBeerDTO.getId().toString())))// This other way of verify the beer id
-                    .andExpect(jsonPath("$.beerName",is(testBeerDTO.getBeerName()))); // Verify that beerName in json is equals to testBeer.getBeerName()
+                    .andExpect(jsonPath("$.id", is(testBeer.getId().toString())))// This other way of verify the beer id
+                    .andExpect(jsonPath("$.beerName",is(testBeer.getBeerName()))); // Verify that beerName in json is equals to testBeer.getBeerName()
 // According to chatgpt this is a better option to make the comparison
 
 
@@ -89,78 +89,78 @@ class BeerControllerTest {
     @Test
     void createNewBeer() throws Exception {
         // 1 Getting a Beer just get something to return
-        BeerDTO createdBeerDTO = beerServiceImpl.listBeers().get(0);
+        BeerDTO createdBeer = beerServiceImpl.listBeers().get(0);
         // Simulation that id is null just for "save"
-        BeerDTO newBeerDTO =  BeerDTO.builder()
+        BeerDTO newBeer =  BeerDTO.builder()
                 .id(null)
                 .version(null)
-                .beerName(createdBeerDTO.getBeerName())
-                .beerStyle(createdBeerDTO.getBeerStyle())
-                .upc(createdBeerDTO.getUpc())
-                .price(createdBeerDTO.getPrice())
-                .quantityOnHand(createdBeerDTO.getQuantityOnHand())
-                .createdDate(createdBeerDTO.getCreatedDate())
-                .updatedDate(createdBeerDTO.getUpdatedDate())
+                .beerName(createdBeer.getBeerName())
+                .beerStyle(createdBeer.getBeerStyle())
+                .upc(createdBeer.getUpc())
+                .price(createdBeer.getPrice())
+                .quantityOnHand(createdBeer.getQuantityOnHand())
+                .createdDate(createdBeer.getCreatedDate())
+                .updatedDate(createdBeer.getUpdatedDate())
                 .build();
 
 
         // 2 Setting the result we want
 
-        given(beerService.saveBeer(newBeerDTO)).willReturn(createdBeerDTO);
+        given(beerService.saveBeer(newBeer)).willReturn(createdBeer);
 
         // 3 Simulating the post request to create the beer and the kind of response
         mockMvc.perform(post(BeerController.BEER_PATH)
                 .accept(MediaType.APPLICATION_JSON) // The response we expect is a Json
                     .contentType(MediaType.APPLICATION_JSON) // The request has body of json format
-                    .content(objectMapper.writeValueAsString(newBeerDTO))) // Convert beer to a json and set in body request
+                    .content(objectMapper.writeValueAsString(newBeer))) // Convert beer to a json and set in body request
                 .andExpect(status().isCreated()) // It's expected and HTTP Code 201 = Created in the response
                 .andExpect(header().exists("Location")) // It's expected the Location header in response
-                .andExpect(header().string("Location", containsString(BeerController.BEER_PATH + "/" + createdBeerDTO.getId())));
+                .andExpect(header().string("Location", containsString(BeerController.BEER_PATH + "/" + createdBeer.getId())));
                 // chatgpt suggestion, validate that Location has the correct url
 
     }
 
     @Test
     void updateBeer()throws Exception{
-        BeerDTO beerDTO = beerServiceImpl.listBeers().get(0);
+        BeerDTO beer = beerServiceImpl.listBeers().get(0);
 
-        mockMvc.perform(put(BeerController.BEER_PATH_ID, beerDTO.getId())
+        mockMvc.perform(put(BeerController.BEER_PATH_ID, beer.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(beerDTO)))
+                .content(objectMapper.writeValueAsString(beer)))
                 .andExpect(status().isNoContent()); // set an HTTP status 204 = NO CONTENT
         verify(beerService).updateBeerById(any(UUID.class), any(BeerDTO.class));
     }
 
     @Test
     void deleteBeer()throws Exception{
-        BeerDTO beerDTO = beerServiceImpl.listBeers().get(0);
+        BeerDTO beer = beerServiceImpl.listBeers().get(0);
 
-        mockMvc.perform(delete(BeerController.BEER_PATH_ID, beerDTO.getId())
+        mockMvc.perform(delete(BeerController.BEER_PATH_ID, beer.getId())
                 .accept(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isNoContent());
 
         verify(beerService).deleteById(uuidArgumentCaptor.capture());// Verify that the deleteById() method of the beerService service was called with a UUID.
                                                                     // Capture this UUID for later inspection.
-        assertThat(beerDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());// Ensure that the captured UUID is equal to the ID of the Beer object attempted to delete.
+        assertThat(beer.getId()).isEqualTo(uuidArgumentCaptor.getValue());// Ensure that the captured UUID is equal to the ID of the Beer object attempted to delete.
     }
 
     @Test
     void testPatchBeer()throws Exception {
-        BeerDTO beerDTO = beerServiceImpl.listBeers().get(0);
+        BeerDTO beer = beerServiceImpl.listBeers().get(0);
 
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name");
 
-        mockMvc.perform(patch(BeerController.BEER_PATH_ID, beerDTO.getId())
+        mockMvc.perform(patch(BeerController.BEER_PATH_ID, beer.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerMap)))
                 .andExpect(status().isNoContent());
 
         verify(beerService).updatePatchBeerById(uuidArgumentCaptor.capture(), beerArgumentCaptor.capture());
-        assertThat(beerDTO.getId()).isEqualTo(uuidArgumentCaptor.getValue());
+        assertThat(beer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
         assertThat(beerMap.get("beerName")).isEqualTo(beerArgumentCaptor.getValue().getBeerName());
     }
 

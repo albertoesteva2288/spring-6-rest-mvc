@@ -31,16 +31,16 @@ public class CustomerController {
     }
 
     @PostMapping(value= CUSTOMER_PATH)
-    public ResponseEntity createNewCustomer(@RequestBody CustomerDTO customerDTO) {
-       CustomerDTO customerDTOSaved = customerService.saveCustomer(customerDTO);
+    public ResponseEntity createNewCustomer(@RequestBody CustomerDTO customer) {
+       CustomerDTO customerSaved = customerService.saveCustomer(customer);
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.LOCATION, CUSTOMER_PATH + "/" + customerDTOSaved.getId());
+        headers.add(HttpHeaders.LOCATION, CUSTOMER_PATH + "/" + customerSaved.getId());
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 
     @PutMapping(value = CUSTOMER_PATH_ID)
-    public ResponseEntity updateCustomerById(@PathVariable(value = "customerId") UUID customerId, @RequestBody CustomerDTO customerDTO) {
-        customerService.updateCustomerById(customerId, customerDTO);
+    public ResponseEntity updateCustomerById(@PathVariable(value = "customerId") UUID customerId, @RequestBody CustomerDTO customer) {
+        customerService.updateCustomerById(customerId, customer);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
@@ -51,8 +51,8 @@ public class CustomerController {
     }
 
     @PatchMapping(value = CUSTOMER_PATH_ID)
-    public ResponseEntity updatePatchCustomerById(@PathVariable(value = "customerId") UUID customerId, @RequestBody CustomerDTO customerDTO) {
-        customerService.updatePatchCustomerById(customerId, customerDTO);
+    public ResponseEntity updatePatchCustomerById(@PathVariable(value = "customerId") UUID customerId, @RequestBody CustomerDTO customer) {
+        customerService.updatePatchCustomerById(customerId, customer);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

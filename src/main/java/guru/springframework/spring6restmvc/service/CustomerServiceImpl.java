@@ -14,7 +14,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     public CustomerServiceImpl() {
         customerMap = new HashMap<>();
-        CustomerDTO customerDTO1 = CustomerDTO.builder()
+        CustomerDTO customer1 = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .customerName("Jhon")
                 .version(1)
@@ -22,7 +22,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .lastModifiedDate(LocalDate.now())
                 .build();
 
-        CustomerDTO customerDTO2 = CustomerDTO.builder()
+        CustomerDTO customer2 = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .customerName("Sarah")
                 .version(1)
@@ -30,7 +30,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .lastModifiedDate(LocalDate.now())
                 .build();
 
-        CustomerDTO customerDTO3 = CustomerDTO.builder()
+        CustomerDTO customer3 = CustomerDTO.builder()
                 .id(UUID.randomUUID())
                 .customerName("Richard")
                 .version(1)
@@ -39,9 +39,9 @@ public class CustomerServiceImpl implements CustomerService {
                 .build();
 
 
-        customerMap.put(customerDTO1.getId(), customerDTO1);
-        customerMap.put(customerDTO2.getId(), customerDTO2);
-        customerMap.put(customerDTO3.getId(), customerDTO3);
+        customerMap.put(customer1.getId(), customer1);
+        customerMap.put(customer2.getId(), customer2);
+        customerMap.put(customer3.getId(), customer3);
     }
 
     @Override
@@ -55,25 +55,25 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
-        CustomerDTO savedCustomerDTO = CustomerDTO.builder()
+    public CustomerDTO saveCustomer(CustomerDTO customer) {
+        CustomerDTO savedCustomer = CustomerDTO.builder()
                 .id(UUID.randomUUID())
-                .customerName(customerDTO.getCustomerName())
-                .version(customerDTO.getVersion())
+                .customerName(customer.getCustomerName())
+                .version(customer.getVersion())
                 .createdDate(LocalDate.now())
                 .lastModifiedDate(LocalDate.now())
                 .build();
-        customerMap.put(savedCustomerDTO.getId(), savedCustomerDTO);
-        return savedCustomerDTO;
+        customerMap.put(savedCustomer.getId(), savedCustomer);
+        return savedCustomer;
     }
 
     @Override
-    public CustomerDTO updateCustomerById(UUID id, CustomerDTO customerDTO) {
-        CustomerDTO existingCustomerDTO = customerMap.get(id);
-        existingCustomerDTO.setCustomerName(customerDTO.getCustomerName());
-        existingCustomerDTO.setVersion(customerDTO.getVersion());
-        existingCustomerDTO.setLastModifiedDate(LocalDate.now());
-        return existingCustomerDTO;
+    public CustomerDTO updateCustomerById(UUID id, CustomerDTO customer) {
+        CustomerDTO existingCustomer = customerMap.get(id);
+        existingCustomer.setCustomerName(customer.getCustomerName());
+        existingCustomer.setVersion(customer.getVersion());
+        existingCustomer.setLastModifiedDate(LocalDate.now());
+        return existingCustomer;
     }
 
     @Override
@@ -82,15 +82,15 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO updatePatchCustomerById(UUID customerId, CustomerDTO customerDTO) {
-        CustomerDTO existingCustomerDTO = customerMap.get(customerId);
-        if(StringUtils.hasText(customerDTO.getCustomerName())) {
-            existingCustomerDTO.setCustomerName(customerDTO.getCustomerName());
+    public CustomerDTO updatePatchCustomerById(UUID customerId, CustomerDTO customer) {
+        CustomerDTO existingCustomer = customerMap.get(customerId);
+        if(StringUtils.hasText(customer.getCustomerName())) {
+            existingCustomer.setCustomerName(customer.getCustomerName());
         }
-        if(customerDTO.getVersion() != null){
-            existingCustomerDTO.setVersion(customerDTO.getVersion());
+        if(customer.getVersion() != null){
+            existingCustomer.setVersion(customer.getVersion());
         }
-        existingCustomerDTO.setLastModifiedDate(LocalDate.now());
-        return existingCustomerDTO;
+        existingCustomer.setLastModifiedDate(LocalDate.now());
+        return existingCustomer;
     }
 }

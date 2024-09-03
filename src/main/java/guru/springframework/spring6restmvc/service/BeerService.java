@@ -11,11 +11,11 @@ public interface BeerService {
     List<BeerDTO> listBeers();
     Optional<BeerDTO> getBeerById(UUID id);
 
-    BeerDTO saveBeer(BeerDTO beerDTO);
+    BeerDTO saveBeer(BeerDTO beer);
 
-    BeerDTO updateBeerById(UUID beerId, BeerDTO beerDTO);
+    BeerDTO updateBeerById(UUID beerId, BeerDTO beer);
 
     void deleteById(UUID beerId);
 
-    BeerDTO updatePatchBeerById(UUID beerId, BeerDTO beerDTO);
+    BeerDTO updatePatchBeerById(UUID beerId, BeerDTO beer);
 }
