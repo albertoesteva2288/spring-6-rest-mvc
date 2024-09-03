@@ -3,11 +3,11 @@ package guru.springframework.spring6restmvc;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
-class Spring6RestMvcApplicationTests {
+class Spring6RestMvcApplicationTest {
 
     @Test
-    void contextLoads() {
-    }
-
+    void contextLoads() {}
 }
