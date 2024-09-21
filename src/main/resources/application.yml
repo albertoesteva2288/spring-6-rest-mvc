@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: spring-6-rest-mvc
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/springcourse
+    user-name: root
+    password: root
+  #    hikari:
+  #      maximum-pool-size: 10
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+    show-sql: true
+
+logging:
+  level:
+    guru:
+      springframework:
+        spring6restmvc: debug

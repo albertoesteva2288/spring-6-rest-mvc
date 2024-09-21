@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -39,6 +38,7 @@ public class BootStrapData implements CommandLineRunner {
                    .quantityOnHand(122)
                    .createdDate(LocalDate.now())
                    .updatedDate(LocalDate.now())
+                   .version(1)
                    .build();
 
            Beer beer2 = Beer.builder()
@@ -50,6 +50,7 @@ public class BootStrapData implements CommandLineRunner {
                    .quantityOnHand(392)
                    .createdDate(LocalDate.now())
                    .updatedDate(LocalDate.now())
+                   .version(1)
                    .build();
 
            Beer beer3 = Beer.builder()
@@ -61,6 +62,7 @@ public class BootStrapData implements CommandLineRunner {
                    .quantityOnHand(144)
                    .createdDate(LocalDate.now())
                    .updatedDate(LocalDate.now())
+                   .version(1)
                    .build();
            beerRepository.saveAll(Arrays.asList(beer1,beer2,beer3));
        }
@@ -72,25 +74,25 @@ public class BootStrapData implements CommandLineRunner {
             Customer customer1 = Customer.builder()
 
                     .customerName("Jhon")
-
                     .createdDate(LocalDate.now())
                     .lastModifiedDate(LocalDate.now())
+                    .version(1)
                     .build();
 
             Customer customer2 = Customer.builder()
 
                     .customerName("Sarah")
-
                     .createdDate(LocalDate.now())
                     .lastModifiedDate(LocalDate.now())
+                    .version(1)
                     .build();
 
             Customer customer3 = Customer.builder()
 
                     .customerName("Richard")
-                    .version(1)
                     .createdDate(LocalDate.now())
                     .lastModifiedDate(LocalDate.now())
+                    .version(1)
                     .build();
 
             customerRepository.save(customer1);
