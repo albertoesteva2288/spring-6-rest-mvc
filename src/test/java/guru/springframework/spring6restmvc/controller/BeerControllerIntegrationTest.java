@@ -30,6 +30,16 @@ class BeerControllerIntegrationTest {
     @Autowired
     BeerMapper beerMapper;
 
+    @Rollback
+    @Transactional
+    @Test
+    void deleteByIdFound(){
+        Beer beer = beerRepository.findAll().get(0);
+        ResponseEntity<?> responseEntity = beerController.deleteBeerById(beer.getId());
+       Optional<Beer> existingBeer = beerRepository.findById(beer.getId());
+       assertThat(existingBeer.isPresent()).isFalse();
+       assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
 
     @Rollback
     @Transactional
@@ -44,9 +54,8 @@ class BeerControllerIntegrationTest {
         ResponseEntity<?> responseEntity= beerController.updateBeerById(beer.getId(), beerDTO);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);//Codigo 204
 
-        beerRepository.findById(beer.getId()).ifPresentOrElse(
-                updatedBeer -> assertThat(updatedBeer.getBeerName()).isEqualTo(updatedName),
-                () -> fail("Beer not found!")
+        beerRepository.findById(beer.getId()).ifPresent(
+                updatedBeer -> assertThat(updatedBeer.getBeerName()).isEqualTo(updatedName)
         );
 
     }

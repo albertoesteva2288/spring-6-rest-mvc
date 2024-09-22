@@ -52,9 +52,8 @@ public class BeerController {
     }
 
     @PatchMapping(value = BEER_PATH_ID)
-    public ResponseEntity<?> updaPatcheBeerById(@PathVariable(value = "beerId") UUID beerId, @RequestBody BeerDTO beer) {
+    public ResponseEntity<?> updatePatchBeerById(@PathVariable(value = "beerId") UUID beerId, @RequestBody BeerDTO beer) {
         beerService.updatePatchBeerById(beerId, beer);
-
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
