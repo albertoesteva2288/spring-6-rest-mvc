@@ -30,6 +30,11 @@ class BeerControllerIntegrationTest {
     @Autowired
     BeerMapper beerMapper;
 
+    @Test
+    void deleteByIdNotFound(){
+        assertThrows(NotFoundException.class, () -> beerController.deleteBeerById(UUID.randomUUID()));
+    }
+
     @Rollback
     @Transactional
     @Test
