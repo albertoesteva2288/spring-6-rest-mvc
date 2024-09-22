@@ -5,6 +5,7 @@ import guru.springframework.spring6restmvc.service.BeerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class BeerController {
     private final BeerService beerService;
 
     @PostMapping(value = BEER_PATH)
-    public ResponseEntity<?> createNewBeer(@RequestBody BeerDTO beer) {
+    public ResponseEntity<?> createNewBeer(@Validated @RequestBody BeerDTO beer) {
         BeerDTO savedBeer = beerService.saveBeer(beer);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", BEER_PATH + "/" + savedBeer.getId());

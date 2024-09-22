@@ -107,10 +107,10 @@
                 <configuration>
                     <source>17</source>
                     <target>17</target>
-                    <compilerArgs>
-                        <!-- Configuración para MapStruct -->
-                        <compilerArg>-Amapstruct.defaultComponentModel=spring</compilerArg>
-                    </compilerArgs>
+<!--                    <compilerArgs>-->
+<!--                        &lt;!&ndash; Configuración para MapStruct &ndash;&gt;-->
+<!--                        <compilerArg>-Amapstruct.defaultComponentModel=spring</compilerArg>-->
+<!--                    </compilerArgs>-->
                     <annotationProcessorPaths>
                         <!-- MapStruct Processor -->
                         <path>
