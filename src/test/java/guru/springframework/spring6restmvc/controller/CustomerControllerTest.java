@@ -55,19 +55,6 @@ class CustomerControllerTest {
     }
 
     @Test
-    void getListCustomers() throws Exception {
-        // Preparin the expected response
-        given(customerService.listCustomers()).willReturn(customerServiceImpl.listCustomers());
-        // simulating the http get request and its reponse
-        mockMvc.perform(get(CustomerController.CUSTOMER_PATH)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.length()", is(customerServiceImpl.listCustomers().size())))
-        ;
-    }
-
-    @Test
     void getCustomerById() throws Exception {
         CustomerDTO customer = customerServiceImpl.listCustomers().get(0);
         given(customerService.getCustomerById(customer.getId())).willReturn(Optional.of(customer));
@@ -83,6 +70,20 @@ class CustomerControllerTest {
     }
 
     @Test
+    void getListCustomers() throws Exception {
+        // Preparin the expected response
+        given(customerService.listCustomers()).willReturn(customerServiceImpl.listCustomers());
+        // simulating the http get request and its reponse
+        mockMvc.perform(get(CustomerController.CUSTOMER_PATH)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()", is(customerServiceImpl.listCustomers().size())))
+        ;
+    }
+
+
+    @Test
     void createNewCustomer() throws Exception {
         // 1 Getting a Customer just get something to return
         CustomerDTO createdCustomer = customerServiceImpl.listCustomers().get(0);
@@ -92,7 +93,7 @@ class CustomerControllerTest {
                 .customerName(createdCustomer.getCustomerName())
                 .version(createdCustomer.getVersion())
                 .createdDate(createdCustomer.getCreatedDate())
-                .lastModifiedDate(createdCustomer.getLastModifiedDate())
+                .updatedDate(createdCustomer.getUpdatedDate())
                 .build();
 
         // 2 Setting the result we want
@@ -112,7 +113,7 @@ class CustomerControllerTest {
     @Test
     void updateCustomer() throws Exception {
         CustomerDTO customer = customerServiceImpl.listCustomers().get(0);
-
+given(customerService.updateCustomerById(any(), any())).willReturn(Optional.of(customer));
         mockMvc.perform(put(CustomerController.CUSTOMER_PATH_ID, customer.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -125,6 +126,7 @@ class CustomerControllerTest {
     void deleteCustomerById() throws Exception {
         CustomerDTO customer = customerServiceImpl.listCustomers().get(0);
 
+       given(customerService.deleteById(any())).willReturn(true);
         mockMvc.perform(delete(CustomerController.CUSTOMER_PATH_ID, customer.getId())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());

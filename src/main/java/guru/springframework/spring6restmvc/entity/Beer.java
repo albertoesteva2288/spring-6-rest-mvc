@@ -3,7 +3,6 @@ package guru.springframework.spring6restmvc.entity;
 import guru.springframework.spring6restmvc.model.BeerStyle;
 import jakarta.persistence.*;
 import lombok.*;
-//import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
@@ -34,4 +33,5 @@ public class Beer {
     private BigDecimal price;
     private LocalDate createdDate;
     private LocalDate updatedDate;
+
 }

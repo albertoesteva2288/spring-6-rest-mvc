@@ -41,9 +41,9 @@ class BeerControllerIntegrationTest {
     void deleteByIdFound(){
         Beer beer = beerRepository.findAll().get(0);
         ResponseEntity<?> responseEntity = beerController.deleteBeerById(beer.getId());
-       Optional<Beer> existingBeer = beerRepository.findById(beer.getId());
-       assertThat(existingBeer.isPresent()).isFalse();
-       assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        Optional<Beer> existingBeer = beerRepository.findById(beer.getId());
+        assertThat(existingBeer.isPresent()).isFalse();
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 
     @Rollback

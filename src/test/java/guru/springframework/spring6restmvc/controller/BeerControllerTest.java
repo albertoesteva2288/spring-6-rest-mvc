@@ -140,9 +140,7 @@ class BeerControllerTest {
         given(beerService.deleteById(any())).willReturn(true);
         mockMvc.perform(delete(BeerController.BEER_PATH_ID, beer.getId())
                 .accept(MediaType.APPLICATION_JSON))
-
                 .andExpect(status().isNoContent());
-
         verify(beerService).deleteById(uuidArgumentCaptor.capture());// Verify that the deleteById() method of the beerService service was called with a UUID.
                                                                     // Capture this UUID for later inspection.
         assertThat(beer.getId()).isEqualTo(uuidArgumentCaptor.getValue());// Ensure that the captured UUID is equal to the ID of the Beer object attempted to delete.

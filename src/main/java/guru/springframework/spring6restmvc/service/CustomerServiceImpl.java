@@ -19,7 +19,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .customerName("Jhon")
                 .version(1)
                 .createdDate(LocalDate.now())
-                .lastModifiedDate(LocalDate.now())
+                .updatedDate(LocalDate.now())
                 .build();
 
         CustomerDTO customer2 = CustomerDTO.builder()
@@ -27,7 +27,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .customerName("Sarah")
                 .version(1)
                 .createdDate(LocalDate.now())
-                .lastModifiedDate(LocalDate.now())
+                .updatedDate(LocalDate.now())
                 .build();
 
         CustomerDTO customer3 = CustomerDTO.builder()
@@ -35,7 +35,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .customerName("Richard")
                 .version(1)
                 .createdDate(LocalDate.now())
-                .lastModifiedDate(LocalDate.now())
+                .updatedDate(LocalDate.now())
                 .build();
 
 
@@ -61,28 +61,29 @@ public class CustomerServiceImpl implements CustomerService {
                 .customerName(customer.getCustomerName())
                 .version(customer.getVersion())
                 .createdDate(LocalDate.now())
-                .lastModifiedDate(LocalDate.now())
+                .updatedDate(LocalDate.now())
                 .build();
         customerMap.put(savedCustomer.getId(), savedCustomer);
         return savedCustomer;
     }
 
     @Override
-    public CustomerDTO updateCustomerById(UUID id, CustomerDTO customer) {
+    public Optional<CustomerDTO> updateCustomerById(UUID id, CustomerDTO customer) {
         CustomerDTO existingCustomer = customerMap.get(id);
         existingCustomer.setCustomerName(customer.getCustomerName());
         existingCustomer.setVersion(customer.getVersion());
-        existingCustomer.setLastModifiedDate(LocalDate.now());
-        return existingCustomer;
+        existingCustomer.setUpdatedDate(LocalDate.now());
+        return Optional.of(existingCustomer);
     }
 
     @Override
-    public void deleteById(UUID customerId) {
+    public Boolean deleteById(UUID customerId) {
         customerMap.remove(customerId);
+        return true;
     }
 
     @Override
-    public CustomerDTO updatePatchCustomerById(UUID customerId, CustomerDTO customer) {
+    public Optional<CustomerDTO> updatePatchCustomerById(UUID customerId, CustomerDTO customer) {
         CustomerDTO existingCustomer = customerMap.get(customerId);
         if(StringUtils.hasText(customer.getCustomerName())) {
             existingCustomer.setCustomerName(customer.getCustomerName());
@@ -90,7 +91,7 @@ public class CustomerServiceImpl implements CustomerService {
         if(customer.getVersion() != null){
             existingCustomer.setVersion(customer.getVersion());
         }
-        existingCustomer.setLastModifiedDate(LocalDate.now());
-        return existingCustomer;
+        existingCustomer.setUpdatedDate(LocalDate.now());
+        return Optional.of(existingCustomer);
     }
 }

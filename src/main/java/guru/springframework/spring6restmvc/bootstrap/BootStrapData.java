@@ -75,7 +75,7 @@ public class BootStrapData implements CommandLineRunner {
 
                     .customerName("Jhon")
                     .createdDate(LocalDate.now())
-                    .lastModifiedDate(LocalDate.now())
+                    .updatedDate(LocalDate.now())
                     .version(1)
                     .build();
 
@@ -83,7 +83,7 @@ public class BootStrapData implements CommandLineRunner {
 
                     .customerName("Sarah")
                     .createdDate(LocalDate.now())
-                    .lastModifiedDate(LocalDate.now())
+                    .updatedDate(LocalDate.now())
                     .version(1)
                     .build();
 
@@ -91,7 +91,7 @@ public class BootStrapData implements CommandLineRunner {
 
                     .customerName("Richard")
                     .createdDate(LocalDate.now())
-                    .lastModifiedDate(LocalDate.now())
+                    .updatedDate(LocalDate.now())
                     .version(1)
                     .build();
 

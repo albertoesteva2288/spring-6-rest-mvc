@@ -10,12 +10,8 @@ public interface BeerService {
 
     List<BeerDTO> listBeers();
     Optional<BeerDTO> getBeerById(UUID id);
-
     BeerDTO saveBeer(BeerDTO beer);
-
     Optional<BeerDTO> updateBeerById(UUID beerId, BeerDTO beer);
-
     Boolean deleteById(UUID beerId);
-
-    BeerDTO updatePatchBeerById(UUID beerId, BeerDTO beer);
+    Optional<BeerDTO> updatePatchBeerById(UUID beerId, BeerDTO beer);
 }
