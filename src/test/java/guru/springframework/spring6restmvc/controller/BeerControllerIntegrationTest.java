@@ -17,8 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class BeerControllerIntegrationTest {
@@ -41,15 +40,20 @@ class BeerControllerIntegrationTest {
         beerDTO.setVersion(2);
         final String updatedName = "Beer Updated";
         beerDTO.setBeerName(updatedName);
-        ResponseEntity responseEntity= beerController.updateBeerById(beer.getId(), beerDTO);
+
+        ResponseEntity<?> responseEntity= beerController.updateBeerById(beer.getId(), beerDTO);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);//Codigo 204
 
-        Optional<Beer> updatedBeer = beerRepository.findById(beer.getId());
-        if(updatedBeer.isPresent()){
-            Beer beerUpdated = updatedBeer.get();
-            assertEquals(updatedName, beerUpdated.getBeerName());
-        }
+        beerRepository.findById(beer.getId()).ifPresentOrElse(
+                updatedBeer -> assertThat(updatedBeer.getBeerName()).isEqualTo(updatedName),
+                () -> fail("Beer not found!")
+        );
 
+    }
+
+    @Test
+    void testUpdateNotFound(){
+        assertThrows(NotFoundException.class, () -> beerController.updateBeerById(UUID.randomUUID(), BeerDTO.builder().build()));
     }
 
     @Rollback
@@ -60,26 +64,28 @@ class BeerControllerIntegrationTest {
                 .beerName("New Beer")
                 .build();
 
-        ResponseEntity responseEntity = beerController.createNewBeer(newBeer);
+        ResponseEntity<?> responseEntity = beerController.createNewBeer(newBeer);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);// Codigo 201
         assertThat(responseEntity.getHeaders().getLocation()).isNotNull();
         String[] location = responseEntity.getHeaders().getLocation().getPath().split("/");
         UUID beerId = UUID.fromString(location[location.length-1]);
 
-        Optional<Beer> beer = beerRepository.findById(beerId);
-        if(beer.isPresent()){
-            Beer beerUpdated = beer.get();
-            assertThat(beer).isNotNull();
-        }
+        beerRepository.findById(beerId).ifPresentOrElse(
+                beerUpdated -> assertThat(beerUpdated).isNotNull(),
+                () -> fail("Beer not found!")
+        );
 
+//        Beer beerUpdated = beerRepository.findById(beerId)
+//                .map(beer -> {
+//                    assertThat(beer).isNotNull();
+//                    return beer;
+//                }).orElseThrow(() -> new NoSuchElementException("Beer not found!"));
 
 
     }
     @Test
     void testGetByIdNotFound(){
-        NotFoundException exception = assertThrows(NotFoundException.class, () -> {
-            beerController.getBeerById(UUID.randomUUID());
-        });
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> beerController.getBeerById(UUID.randomUUID()));
         assertEquals("Value Not Found", exception.getMessage());
     }
 

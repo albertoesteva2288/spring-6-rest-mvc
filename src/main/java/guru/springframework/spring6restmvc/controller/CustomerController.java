@@ -31,29 +31,29 @@ public class CustomerController {
     }
 
     @PostMapping(value= CUSTOMER_PATH)
-    public ResponseEntity createNewCustomer(@RequestBody CustomerDTO customer) {
+    public ResponseEntity<?> createNewCustomer(@RequestBody CustomerDTO customer) {
        CustomerDTO customerSaved = customerService.saveCustomer(customer);
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.LOCATION, CUSTOMER_PATH + "/" + customerSaved.getId());
-        return new ResponseEntity(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     @PutMapping(value = CUSTOMER_PATH_ID)
-    public ResponseEntity updateCustomerById(@PathVariable(value = "customerId") UUID customerId, @RequestBody CustomerDTO customer) {
+    public ResponseEntity<?> updateCustomerById(@PathVariable(value = "customerId") UUID customerId, @RequestBody CustomerDTO customer) {
         customerService.updateCustomerById(customerId, customer);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(value = CUSTOMER_PATH_ID )
-    public ResponseEntity deleteCustomerById(@PathVariable(value = "customerId") UUID customerId) {
+    public ResponseEntity<?> deleteCustomerById(@PathVariable(value = "customerId") UUID customerId) {
         customerService.deleteById(customerId);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping(value = CUSTOMER_PATH_ID)
-    public ResponseEntity updatePatchCustomerById(@PathVariable(value = "customerId") UUID customerId, @RequestBody CustomerDTO customer) {
+    public ResponseEntity<?> updatePatchCustomerById(@PathVariable(value = "customerId") UUID customerId, @RequestBody CustomerDTO customer) {
         customerService.updatePatchCustomerById(customerId, customer);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

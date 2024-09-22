@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -28,7 +27,6 @@ public class BeerServiceJPA implements BeerService {
 
     @Override
     public Optional<BeerDTO> getBeerById(UUID id) {
-        //return Optional.ofNullable(beerMapper.beerToBeerDTO(beerRepository.findById(id).orElse(null)));
         return beerRepository.findById(id).map(beerMapper::beerToBeerDTO);
     }
 
@@ -38,13 +36,12 @@ public class BeerServiceJPA implements BeerService {
     }
 
     @Override
-    public BeerDTO updateBeerById(UUID beerId, BeerDTO beerDTO) {
-        return beerMapper.beerToBeerDTO(beerRepository.findById(beerId)
+    public Optional<BeerDTO> updateBeerById(UUID beerId, BeerDTO beerDTO) {
+        return beerRepository.findById(beerId)
                 .map(existingBeer -> {
                     beerMapper.updateBeerFromBeerDTO(beerDTO, existingBeer);
-                    return beerRepository.save(existingBeer);
-                })
-                .orElseThrow(() -> new NoSuchElementException("Beer not found with ID: " + beerId)));
+                    return beerMapper.beerToBeerDTO(beerRepository.save(existingBeer));
+                });
     }
 
     @Override

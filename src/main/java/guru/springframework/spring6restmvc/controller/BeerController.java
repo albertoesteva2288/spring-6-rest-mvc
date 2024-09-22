@@ -21,11 +21,11 @@ public class BeerController {
     private final BeerService beerService;
 
     @PostMapping(value = BEER_PATH)
-    public ResponseEntity createNewBeer(@RequestBody BeerDTO beer) {
+    public ResponseEntity<?> createNewBeer(@RequestBody BeerDTO beer) {
         BeerDTO savedBeer = beerService.saveBeer(beer);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", BEER_PATH + "/" + savedBeer.getId());
-        return new ResponseEntity(headers,HttpStatus.CREATED);
+        return new ResponseEntity<>(headers,HttpStatus.CREATED);
     }
 
    @GetMapping(value = BEER_PATH)
@@ -40,22 +40,22 @@ public class BeerController {
     }
 
     @PutMapping(value = BEER_PATH_ID)
-    public ResponseEntity updateBeerById(@PathVariable(value = "beerId") UUID beerId, @RequestBody BeerDTO beer) {
-        beerService.updateBeerById(beerId, beer);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    public ResponseEntity<?> updateBeerById(@PathVariable(value = "beerId") UUID beerId, @RequestBody BeerDTO beer) {
+        beerService.updateBeerById(beerId, beer).orElseThrow(NotFoundException::new);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(value = BEER_PATH_ID)
-    public ResponseEntity deleteBeerById(@PathVariable(value = "beerId") UUID beerId) {
+    public ResponseEntity<?> deleteBeerById(@PathVariable(value = "beerId") UUID beerId) {
         beerService.deleteById(beerId);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping(value = BEER_PATH_ID)
-    public ResponseEntity updaPatcheBeerById(@PathVariable(value = "beerId") UUID beerId, @RequestBody BeerDTO beer) {
-        BeerDTO updatedBeer = beerService.updatePatchBeerById(beerId, beer);
+    public ResponseEntity<?> updaPatcheBeerById(@PathVariable(value = "beerId") UUID beerId, @RequestBody BeerDTO beer) {
+        beerService.updatePatchBeerById(beerId, beer);
 
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
