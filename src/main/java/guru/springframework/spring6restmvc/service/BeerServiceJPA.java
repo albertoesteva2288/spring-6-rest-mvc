@@ -1,6 +1,5 @@
 package guru.springframework.spring6restmvc.service;
 
-import guru.springframework.spring6restmvc.entity.Beer;
 import guru.springframework.spring6restmvc.mapper.BeerMapper;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.repository.BeerRepository;
@@ -9,6 +8,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -34,14 +34,17 @@ public class BeerServiceJPA implements BeerService {
 
     @Override
     public BeerDTO saveBeer(BeerDTO beerDTO) {
-        Beer beer = beerMapper.beerDTOToBeer(beerDTO);
-        return beerMapper.beerToBeerDTO(beerRepository.save(beer));
-
+        return beerMapper.beerToBeerDTO(beerRepository.save(beerMapper.beerDTOToBeer(beerDTO)));
     }
 
     @Override
-    public BeerDTO updateBeerById(UUID beerId, BeerDTO beer) {
-        return null;
+    public BeerDTO updateBeerById(UUID beerId, BeerDTO beerDTO) {
+        return beerMapper.beerToBeerDTO(beerRepository.findById(beerId)
+                .map(existingBeer -> {
+                    beerMapper.updateBeerFromBeerDTO(beerDTO, existingBeer);
+                    return beerRepository.save(existingBeer);
+                })
+                .orElseThrow(() -> new NoSuchElementException("Beer not found with ID: " + beerId)));
     }
 
     @Override
