@@ -135,6 +135,22 @@ class BeerControllerTest {
     }
 
     @Test
+    void updateBeerBlankName()throws Exception{
+        BeerDTO bebeerDTO = beerServiceImpl.listBeers().get(0);
+        bebeerDTO.setBeerName("");
+        given(beerService.updateBeerById(any(), any())).willReturn(Optional.of(bebeerDTO));
+        mockMvc.perform(put(BeerController.BEER_PATH_ID, bebeerDTO.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(bebeerDTO)))
+                .andExpect(status().isBadRequest())
+                // It seems that the exception is thrown from the first violation so it only marks one error,
+                // since we only modified one property (beerName) to be empty.
+                .andExpect(jsonPath("$.length()", is(1)));
+
+    }
+
+    @Test
     void deleteBeer()throws Exception{
         BeerDTO beer = beerServiceImpl.listBeers().get(0);
 
@@ -181,7 +197,10 @@ class BeerControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(beerDTO)))
-                .andExpect(status().isBadRequest()).andReturn();
+                .andExpect(status().isBadRequest())
+                // The number 6 comes from each of the unfulfilled conditions imposed in the dto, through each of the validation annotations
+                .andExpect(jsonPath("$.length()", is(6)))
+                .andReturn();
 
         System.out.println(mvcResult.getResponse().getContentAsString());
     }

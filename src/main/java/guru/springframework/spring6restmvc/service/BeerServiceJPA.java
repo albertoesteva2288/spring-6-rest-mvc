@@ -36,7 +36,7 @@ public class BeerServiceJPA implements BeerService {
     }
 
     @Override
-    public Optional<BeerDTO> updateBeerById(UUID beerId, BeerDTO beerDTO) {
+    public Optional<BeerDTO> updateBeerById(UUID beerId,BeerDTO beerDTO) {
         return beerRepository.findById(beerId)
                 .map(existingBeer -> {
                     beerMapper.updateBeerFromBeerDTO(beerDTO, existingBeer);
