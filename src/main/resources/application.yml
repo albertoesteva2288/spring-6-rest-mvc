@@ -2,10 +2,12 @@ spring:
   application:
     name: spring-6-rest-mvc
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/springcourse
-    user-name: root
-    password: root
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:springcourse
+    user-name: sa
+    password:
+  h2:
+    console.enabled: true
   #    hikari:
   #      maximum-pool-size: 10
   jpa:
@@ -13,7 +15,7 @@ spring:
       ddl-auto: create
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
+        dialect: org.hibernate.dialect.H2Dialect
 #        format_sql: true
 #    show-sql: true
 
