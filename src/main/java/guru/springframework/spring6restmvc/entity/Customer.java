@@ -20,7 +20,7 @@ public class Customer {
     //@GenericGenerator(name = "UUID" , strategy = "org.hibernate.id.UUIDGenerator")
     // Strategy was mark as deprecated, I modified the code of course to the next
     @UuidGenerator
-    @Column(length = 36, columnDefinition = "BINARY(16)", updatable = false, nullable = false)
+    @Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
     private UUID id;
     private String customerName;
     @Version

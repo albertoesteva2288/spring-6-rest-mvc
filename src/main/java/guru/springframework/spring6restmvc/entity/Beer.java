@@ -4,6 +4,7 @@ import guru.springframework.spring6restmvc.model.BeerStyle;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -24,12 +25,16 @@ public class Beer {
     //@GenericGenerator(name = "UUID" , strategy = "org.hibernate.id.UUIDGenerator")
     // Strategy was mark as deprecated, I modified the code of course to the next
     @UuidGenerator
-    @Column(length = 36, columnDefinition = "BINARY(16)", updatable = false, nullable = false)
+    @Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
     private UUID id;
     @Version
     private Integer version;
     @NotBlank
     @NotNull
+    // @Size: This validation occurs before attempting to persist the data, at the application layer level.
+    @Size(max = 50)
+    //@Column: This applies at the persistence layer (database) level.
+    @Column(length = 50)
     private String beerName;
     @NotNull
     private BeerStyle beerStyle;
