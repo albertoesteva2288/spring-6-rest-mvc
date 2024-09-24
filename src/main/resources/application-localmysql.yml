@@ -4,6 +4,7 @@ spring:
     url: jdbc:mysql://localhost:3306/restdb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     user-name: restadmin
     password: password
+# Creating a DataSource Pool
     hikari:
       pool-name: RestDB-Pool
       maximum-pool-size: 5
@@ -19,14 +20,24 @@ spring:
         cacheServerConfiguration: true
         elideSetAutoCommits: true
         maintainTimeStats: false
-  # Configuring pool
+# Configuring Hibernate and MySQL communication
   jpa:
     database: mysql
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+## Auto generation of scripts sql by hibernate
+      jakarta:
+        persistence:
+          schema-generation:
+            scripts:
+              action: drop-and-create
+              create-source: metadata
+              drop-target: src/scripts/drop-and-create.sql
+              create-target: src/scripts/drop-and-create.sql
+            create-database-schemas: true
 # show sql
         show-sql: true
 # hibernate format sql

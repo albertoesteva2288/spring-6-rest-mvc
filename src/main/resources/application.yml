@@ -16,6 +16,14 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
+#      jakarta:
+#        persistence:
+#          schema-generation:
+#            scripts:
+#              action: drop-and-create
+#              create-source: metadata
+##              drop-target: drop-and-create.sql
+#              create-target: drop-and-create.sql
 logging:
   level:
     guru:
