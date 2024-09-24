@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PostMapping(value= CUSTOMER_PATH)
-    public ResponseEntity<?> createNewCustomer(@RequestBody CustomerDTO customer) {
+    public ResponseEntity<?> createNewCustomer(@Validated @RequestBody CustomerDTO customer) {
         CustomerDTO customerSaved = customerService.saveCustomer(customer);
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.LOCATION, CUSTOMER_PATH + "/" + customerSaved.getId());
@@ -53,8 +54,8 @@ public class CustomerController {
     }
 
     @PatchMapping(value = CUSTOMER_PATH_ID)
-    public ResponseEntity<?> updatePatchCustomerById(@PathVariable(value = "customerId") UUID customerId, @RequestBody CustomerDTO customer) {
-        customerService.updatePatchCustomerById(customerId, customer).orElseThrow(RuntimeException::new);
+    public ResponseEntity<?> updatePatchCustomerById(@PathVariable(value = "customerId") UUID customerId,@Validated @RequestBody CustomerDTO customer) {
+        customerService.updatePatchCustomerById(customerId, customer);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

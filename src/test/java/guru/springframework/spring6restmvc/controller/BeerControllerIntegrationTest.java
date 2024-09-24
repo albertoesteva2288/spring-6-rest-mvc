@@ -116,14 +116,6 @@ class BeerControllerIntegrationTest {
                 beerUpdated -> assertThat(beerUpdated).isNotNull(),
                 () -> fail("Beer not found!")
         );
-
-//        Beer beerUpdated = beerRepository.findById(beerId)
-//                .map(beer -> {
-//                    assertThat(beer).isNotNull();
-//                    return beer;
-//                }).orElseThrow(() -> new NoSuchElementException("Beer not found!"));
-
-
     }
     @Test
     void testGetByIdNotFound(){

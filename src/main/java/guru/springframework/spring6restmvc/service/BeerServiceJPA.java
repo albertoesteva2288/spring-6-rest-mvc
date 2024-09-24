@@ -56,9 +56,9 @@ public class BeerServiceJPA implements BeerService {
     @Override
     public Optional<BeerDTO> updatePatchBeerById(UUID beerId, BeerDTO beerDTO) {
         return beerRepository.findById(beerId)
-                .map(existingBeer -> {
-                    beerMapper.updateBeerFromBeerDTOIgnoringNulls(beerDTO, existingBeer);
-                    return beerMapper.beerToBeerDTO(beerRepository.save(existingBeer));
-                });
+            .map(existingBeer -> {
+               beerMapper.updateBeerFromBeerDTOIgnoringNulls(beerDTO, existingBeer);
+               return beerMapper.beerToBeerDTO(beerRepository.save(existingBeer));
+            });
     }
 }

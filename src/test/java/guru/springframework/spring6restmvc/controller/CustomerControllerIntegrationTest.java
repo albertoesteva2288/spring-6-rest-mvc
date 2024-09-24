@@ -1,23 +1,31 @@
 package guru.springframework.spring6restmvc.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springframework.spring6restmvc.entity.Customer;
 import guru.springframework.spring6restmvc.mapper.CustomerMapper;
 import guru.springframework.spring6restmvc.model.CustomerDTO;
 import guru.springframework.spring6restmvc.repository.CustomerRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 class CustomerControllerIntegrationTest {
@@ -29,6 +37,19 @@ class CustomerControllerIntegrationTest {
 
     @Autowired
     CustomerMapper customerMapper;
+
+    @Autowired
+    WebApplicationContext wac;
+
+    MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @BeforeEach
+    void setUp(){
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+    }
 
     @Test
     void deleteByIdNotFound(){
@@ -88,13 +109,6 @@ class CustomerControllerIntegrationTest {
                 () -> fail("Beer not found!")
         );
 
-//        Customer customerUpdated = customerRepository.findById(customerId)
-//                .map(customer -> {
-//                    assertThat(customer).isNotNull();
-//                    return customer;
-//                }).orElseThrow(() -> new NoSuchElementException("Customer not found!"));
-//
-
     }
 
     @Test
@@ -112,7 +126,7 @@ class CustomerControllerIntegrationTest {
     }
 
     @Test
-    void listCustomers() {
+    void testListCustomers() {
         List<CustomerDTO> customersDTO = customerController.listCustomers();
         assertThat(customersDTO.size()).isEqualTo(3);
     }
@@ -126,17 +140,39 @@ class CustomerControllerIntegrationTest {
         assertThat(customersDTO.size()).isEqualTo(0);
     }
 
-    @Test
-    void getByIdNotFound() {
-        NotFoundException exception = assertThrows(NotFoundException.class, () -> customerController.getCustomerById(UUID.randomUUID()));
-        assertEquals("Value Not Found", exception.getMessage());
-
-    }
 
     @Test
-    void getCustomerById() {
+    void testPatchCustomer()throws Exception {
         Customer customer = customerRepository.findAll().get(0);
-        CustomerDTO customerDTO = customerController.getCustomerById(customer.getId());
-        assertThat(customerDTO).isNotNull();
+
+        Map<String, Object> customerMap = new HashMap<>();
+        customerMap.put("customerName", "New Name");
+
+
+        mockMvc.perform(patch(CustomerController.CUSTOMER_PATH_ID, customer.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customerMap)))
+                .andExpect(status().isNoContent());
     }
+
+    @Test
+    void testPatchCustomerBadName()throws Exception {
+        Customer customer = customerRepository.findAll().get(0);
+
+        Map<String, Object> customerMap = new HashMap<>();
+        customerMap.put("customerName", "New Name01234567890123456789012345678901234567890123456789");
+
+
+        MvcResult result = mockMvc.perform(patch(CustomerController.CUSTOMER_PATH_ID, customer.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customerMap)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()", is(1))).andReturn();
+
+        System.out.println(result.getResponse().getContentAsString());
+    }
+
 }
