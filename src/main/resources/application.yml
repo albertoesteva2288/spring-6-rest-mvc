@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: localmysql
   application:
     name: spring-6-rest-mvc
   datasource:
@@ -8,17 +10,12 @@ spring:
     password:
   h2:
     console.enabled: true
-  #    hikari:
-  #      maximum-pool-size: 10
   jpa:
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
-#        format_sql: true
-#    show-sql: true
-
 logging:
   level:
     guru:
