@@ -1,23 +1,33 @@
 package guru.springframework.spring6restmvc.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springframework.spring6restmvc.entity.Beer;
 import guru.springframework.spring6restmvc.mapper.BeerMapper;
 import guru.springframework.spring6restmvc.model.BeerDTO;
+import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.repository.BeerRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.math.BigDecimal;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 class BeerControllerIntegrationTest {
@@ -29,6 +39,24 @@ class BeerControllerIntegrationTest {
 
     @Autowired
     BeerMapper beerMapper;
+
+    //WebApplicationContext: It is used to load the entire context of the web application,
+    // which includes all the beans in the Spring context (controllers,
+    // services, repositories, etc.), plus any web-tier-specific configurations.
+    // It is useful for integration testing where you want to test
+    // how multiple layers of the application interact.
+    @Autowired
+    WebApplicationContext wac;
+
+    MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @BeforeEach
+    void setUp(){
+    mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+    }
 
     @Test
     void deleteByIdNotFound(){
@@ -130,4 +158,41 @@ class BeerControllerIntegrationTest {
 
     }
 
+    @Rollback
+    @Transactional
+    @Test
+    void testPatchBeer()throws Exception {
+        Beer beer = beerRepository.findAll().get(0);
+
+        Map<String, Object> beerMap = new HashMap<>();
+        beerMap.put("beerName", "New Name");
+        beerMap.put("beerStyle", BeerStyle.PALE_ALE);
+        beerMap.put("price", BigDecimal.valueOf(150));
+        beerMap.put("upc",12);
+
+        mockMvc.perform(patch(BeerController.BEER_PATH_ID, beer.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerMap)))
+                .andExpect(status().isNoContent());
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void testPatchBeerBadName()throws Exception {
+        Beer beer = beerRepository.findAll().get(0);
+
+        Map<String, Object> beerMap = new HashMap<>();
+        beerMap.put("beerName", "New Name01234567890123456789012345678901234567890123456789");
+       // beerMap.put("beerStyle", BeerStyle.PALE_ALE);
+       // beerMap.put("price", BigDecimal.valueOf(150));
+       // beerMap.put("upc",12);
+
+        mockMvc.perform(patch(BeerController.BEER_PATH_ID, beer.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerMap)))
+                .andExpect(status().isBadRequest());
+    }
 }
