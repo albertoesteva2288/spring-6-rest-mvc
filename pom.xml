@@ -84,7 +84,10 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>8.4.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-mysql</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -108,10 +111,6 @@
                 <configuration>
                     <source>17</source>
                     <target>17</target>
-<!--                    <compilerArgs>-->
-<!--                        &lt;!&ndash; Configuración para MapStruct &ndash;&gt;-->
-<!--                        <compilerArg>-Amapstruct.defaultComponentModel=spring</compilerArg>-->
-<!--                    </compilerArgs>-->
                     <annotationProcessorPaths>
                         <!-- MapStruct Processor -->
                         <path>

@@ -1,6 +1,7 @@
 package guru.springframework.spring6restmvc.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import guru.springframework.spring6restmvc.controller.error.NotFoundException;
 import guru.springframework.spring6restmvc.entity.Customer;
 import guru.springframework.spring6restmvc.mapper.CustomerMapper;
 import guru.springframework.spring6restmvc.model.CustomerDTO;

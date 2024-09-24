@@ -1,4 +1,4 @@
-package guru.springframework.spring6restmvc.controller;
+package guru.springframework.spring6restmvc.controller.error;
 
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;

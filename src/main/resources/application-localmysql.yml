@@ -24,20 +24,20 @@ spring:
   jpa:
     database: mysql
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
 ## Auto generation of scripts sql by hibernate
-      jakarta:
-        persistence:
-          schema-generation:
-            scripts:
-              action: drop-and-create
-              create-source: metadata
-              drop-target: src/scripts/drop-and-create.sql
-              create-target: src/scripts/drop-and-create.sql
-            create-database-schemas: true
+#      jakarta:
+#        persistence:
+#          schema-generation:
+#            scripts:
+#              action: drop-and-create
+#              create-source: metadata
+#              drop-target: src/scripts/drop-and-create.sql
+#              create-target: src/scripts/drop-and-create.sql
+#            create-database-schemas: true
 # show sql
         show-sql: true
 # hibernate format sql
