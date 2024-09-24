@@ -15,7 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
@@ -25,9 +25,9 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.hamcrest.core.Is.is;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 class BeerControllerIntegrationTest {
@@ -85,7 +85,7 @@ class BeerControllerIntegrationTest {
         beerDTO.setBeerName(updatedName);
 
         ResponseEntity<?> responseEntity= beerController.updateBeerById(beer.getId(), beerDTO);
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);//Codigo 204
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 
         beerRepository.findById(beer.getId()).ifPresent(
                 updatedBeer -> assertThat(updatedBeer.getBeerName()).isEqualTo(updatedName)
@@ -107,7 +107,7 @@ class BeerControllerIntegrationTest {
                 .build();
 
         ResponseEntity<?> responseEntity = beerController.createNewBeer(newBeer);
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);// Codigo 201
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(responseEntity.getHeaders().getLocation()).isNotNull();
         String[] location = responseEntity.getHeaders().getLocation().getPath().split("/");
         UUID beerId = UUID.fromString(location[location.length-1]);
@@ -158,8 +158,6 @@ class BeerControllerIntegrationTest {
 
     }
 
-    @Rollback
-    @Transactional
     @Test
     void testPatchBeer()throws Exception {
         Beer beer = beerRepository.findAll().get(0);
@@ -177,22 +175,25 @@ class BeerControllerIntegrationTest {
                 .andExpect(status().isNoContent());
     }
 
-    @Rollback
-    @Transactional
     @Test
     void testPatchBeerBadName()throws Exception {
         Beer beer = beerRepository.findAll().get(0);
 
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name01234567890123456789012345678901234567890123456789");
-       // beerMap.put("beerStyle", BeerStyle.PALE_ALE);
-       // beerMap.put("price", BigDecimal.valueOf(150));
-       // beerMap.put("upc",12);
+        beerMap.put("beerStyle", BeerStyle.PALE_ALE);
+        beerMap.put("price", BigDecimal.valueOf(150));
+        beerMap.put("upc",12);
 
-        mockMvc.perform(patch(BeerController.BEER_PATH_ID, beer.getId())
+        MvcResult result = mockMvc.perform(patch(BeerController.BEER_PATH_ID, beer.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerMap)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()", is(1))).andReturn();
+
+        System.out.println(result.getResponse().getContentAsString());
+
     }
 }

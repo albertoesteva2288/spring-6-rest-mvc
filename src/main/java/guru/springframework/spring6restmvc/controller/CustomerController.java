@@ -54,7 +54,7 @@ public class CustomerController {
 
     @PatchMapping(value = CUSTOMER_PATH_ID)
     public ResponseEntity<?> updatePatchCustomerById(@PathVariable(value = "customerId") UUID customerId, @RequestBody CustomerDTO customer) {
-        customerService.updatePatchCustomerById(customerId, customer);
+        customerService.updatePatchCustomerById(customerId, customer).orElseThrow(RuntimeException::new);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
