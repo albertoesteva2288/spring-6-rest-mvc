@@ -19,5 +19,5 @@ public class CustomerDTO {
     private Integer version;
     private LocalDate createdDate;
     private LocalDate updatedDate;
-
+    private String email;
 }

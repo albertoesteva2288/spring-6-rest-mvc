@@ -1,4 +1,9 @@
 spring:
+  application:
+    name: spring-6-rest-mvc
+  h2:
+    console:
+      enabled: false
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/restdb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
@@ -6,7 +11,7 @@ spring:
     password: password
 # Creating a DataSource Pool
     hikari:
-      pool-name: RestDB-Pool
+      pool-name: RestDB-Pool-MySQL
       maximum-pool-size: 5
 # Extra configuration for performance
       data-source-properties:
@@ -46,6 +51,7 @@ spring:
         highlight_sql: true
   flyway:
     locations: "classpath:db/migration/mysql"
+    enabled: true
 #show bind values in sql
 logging:
   level:
