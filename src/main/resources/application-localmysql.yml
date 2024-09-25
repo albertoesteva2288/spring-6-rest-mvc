@@ -44,7 +44,8 @@ spring:
         format_sql: true
 # highlight sql
         highlight_sql: true
-
+  flyway:
+    locations: "classpath:db/migration/mysql"
 #show bind values in sql
 logging:
   level:
