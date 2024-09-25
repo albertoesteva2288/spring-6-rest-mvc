@@ -1,9 +1,3 @@
-# # The migration folder has to be db.migration
-# # And the script has to start with
-# # An uppercase V
-# # Follow by a number for execution order
-# # Follow by two underscore __
-# # At the end the name file sql
 drop table if exists beer;
 drop table if exists customer;
 create table beer
