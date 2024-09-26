@@ -4,6 +4,7 @@ spring:
   h2:
     console:
       enabled: false
+# DataSource config
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/restdb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
@@ -33,6 +34,12 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+# show sql
+        show-sql: true
+# hibernate format sql
+        format_sql: true
+# highlight sql
+        highlight_sql: true
 ## Auto generation of scripts sql by hibernate
 #      jakarta:
 #        persistence:
@@ -43,18 +50,13 @@ spring:
 #              drop-target: src/scripts/drop-and-create.sql
 #              create-target: src/scripts/drop-and-create.sql
 #            create-database-schemas: true
-# show sql
-        show-sql: true
-# hibernate format sql
-        format_sql: true
-# highlight sql
-        highlight_sql: true
+#flyway configuration
   flyway:
     locations: "classpath:db/migration/mysql"
     enabled: true
 #show bind values in sql
 logging:
   level:
-    org.hibernate.orm.jdbc.bind: trace
+    org:hibernate.orm.jdbc.bind: trace
     org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
