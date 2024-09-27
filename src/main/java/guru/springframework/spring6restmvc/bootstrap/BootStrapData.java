@@ -8,7 +8,6 @@ import guru.springframework.spring6restmvc.model.csv.BeerCSVRecord;
 import guru.springframework.spring6restmvc.repository.BeerRepository;
 import guru.springframework.spring6restmvc.repository.CustomerRepository;
 import guru.springframework.spring6restmvc.service.csv.BeerCSVService;
-import guru.springframework.spring6restmvc.service.csv.BeerCSVServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
@@ -20,6 +19,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -80,8 +80,8 @@ public class BootStrapData implements CommandLineRunner {
                    .upc("12356")
                    .price(new BigDecimal("12.99"))
                    .quantityOnHand(122)
-                   .createdDate(LocalDate.now())
-                   .updatedDate(LocalDate.now())
+                   .createdDate(LocalDateTime.now())
+                   .updatedDate(LocalDateTime.now())
                    .version(1)
                    .build();
 
@@ -92,8 +92,8 @@ public class BootStrapData implements CommandLineRunner {
                    .upc("12356222")
                    .price(new BigDecimal("11.99"))
                    .quantityOnHand(392)
-                   .createdDate(LocalDate.now())
-                   .updatedDate(LocalDate.now())
+                   .createdDate(LocalDateTime.now())
+                   .updatedDate(LocalDateTime.now())
                    .version(1)
                    .build();
 
@@ -104,8 +104,8 @@ public class BootStrapData implements CommandLineRunner {
                    .upc("12356")
                    .price(new BigDecimal("13.99"))
                    .quantityOnHand(144)
-                   .createdDate(LocalDate.now())
-                   .updatedDate(LocalDate.now())
+                   .createdDate(LocalDateTime.now())
+                   .updatedDate(LocalDateTime.now())
                    .version(1)
                    .build();
            beerRepository.saveAll(Arrays.asList(beer1,beer2,beer3));
@@ -118,24 +118,24 @@ public class BootStrapData implements CommandLineRunner {
             Customer customer1 = Customer.builder()
 
                     .customerName("Jhon")
-                    .createdDate(LocalDate.now())
-                    .updatedDate(LocalDate.now())
+                    .createdDate(LocalDateTime.now())
+                    .updatedDate(LocalDateTime.now())
                     .version(1)
                     .build();
 
             Customer customer2 = Customer.builder()
 
                     .customerName("Sarah")
-                    .createdDate(LocalDate.now())
-                    .updatedDate(LocalDate.now())
+                    .createdDate(LocalDateTime.now())
+                    .updatedDate(LocalDateTime.now())
                     .version(1)
                     .build();
 
             Customer customer3 = Customer.builder()
 
                     .customerName("Richard")
-                    .createdDate(LocalDate.now())
-                    .updatedDate(LocalDate.now())
+                    .createdDate(LocalDateTime.now())
+                    .updatedDate(LocalDateTime.now())
                     .version(1)
                     .build();
 
