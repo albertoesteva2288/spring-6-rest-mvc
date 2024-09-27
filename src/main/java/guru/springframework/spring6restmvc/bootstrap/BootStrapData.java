@@ -61,6 +61,7 @@ public class BootStrapData implements CommandLineRunner {
                         .beerName(StringUtils.abbreviate(beerCSVRecord.getBeer(), 50))
                         .beerStyle(beerStyle)
                         .price(BigDecimal.TEN)
+                                .version(1)
                         .upc(beerCSVRecord.getRow().toString())
                         .quantityOnHand(beerCSVRecord.getCount_x())
                         .build());
