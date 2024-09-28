@@ -135,7 +135,7 @@ class BeerControllerIntegrationTest {
 
     @Test
     void testListBeers() {
-        List<BeerDTO> beerDTOs = beerController.listBeers(null);
+        List<BeerDTO> beerDTOs = beerController.listBeers(null, null, true);
         //assertThat(beerDTOs.size()).isEqualTo(3);
         assertThat(beerDTOs.size()).isEqualTo(beerRepository.count());
 
@@ -146,7 +146,7 @@ class BeerControllerIntegrationTest {
     @Test
     void testEmptyListBeers() {
         beerRepository.deleteAll();
-        List<BeerDTO> beerDTOs = beerController.listBeers(null);
+        List<BeerDTO> beerDTOs = beerController.listBeers(null, null, true);
         assertThat(beerDTOs.size()).isEqualTo(0);
         assertThat(beerDTOs.size()).isEqualTo(beerRepository.count());
 
@@ -196,6 +196,6 @@ class BeerControllerIntegrationTest {
         mockMvc.perform(get(BeerController.BEER_PATH)
                 .queryParam("beerName", "IPA"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(2413)));
+                .andExpect(jsonPath("$.size()", is(336)));
     }
 }

@@ -1,9 +1,11 @@
 package guru.springframework.spring6restmvc.service;
 
 
+import guru.springframework.spring6restmvc.entity.Beer;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.model.BeerStyle;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -62,7 +64,7 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public List<BeerDTO> listBeers(String beerName) {
+    public List<BeerDTO> listBeers(Specification<Beer> beerSpecification, boolean showInventory) {
         return new ArrayList<>(beerMap.values());
     }
 
