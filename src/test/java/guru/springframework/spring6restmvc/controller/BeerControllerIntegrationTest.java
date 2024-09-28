@@ -135,7 +135,7 @@ class BeerControllerIntegrationTest {
 
     @Test
     void testListBeers() {
-        List<BeerDTO> beerDTOs = beerController.listBeers(null, null, true);
+        List<BeerDTO> beerDTOs = beerController.listBeers(null, null, true, 1, 25);
         //assertThat(beerDTOs.size()).isEqualTo(3);
         assertThat(beerDTOs.size()).isEqualTo(beerRepository.count());
 
@@ -146,7 +146,7 @@ class BeerControllerIntegrationTest {
     @Test
     void testEmptyListBeers() {
         beerRepository.deleteAll();
-        List<BeerDTO> beerDTOs = beerController.listBeers(null, null, true);
+        List<BeerDTO> beerDTOs = beerController.listBeers(null, null, true, 1, 25);
         assertThat(beerDTOs.size()).isEqualTo(0);
         assertThat(beerDTOs.size()).isEqualTo(beerRepository.count());
 

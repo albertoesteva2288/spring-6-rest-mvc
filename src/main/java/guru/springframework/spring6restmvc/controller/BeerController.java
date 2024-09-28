@@ -37,10 +37,11 @@ public class BeerController {
    @GetMapping(value = BEER_PATH)
     public List<BeerDTO> listBeers(@RequestParam(required = false) String beerName,
                                    @RequestParam(required = false) BeerStyle beerStyle,
-                                   @RequestParam(required = false) boolean showInventory) {
-       Specification<Beer> spec = Specification.where(BeerSpecification.hasBeerNameLike(beerName))
-               .and(BeerSpecification.hasBeerStyle(beerStyle));
-       return beerService.listBeers(spec, showInventory);
+                                   @RequestParam(required = false) Boolean showInventory,
+                                   @RequestParam(required = false) Integer pageNumber,
+                                   @RequestParam(required = false) Integer pageSize) {
+
+       return beerService.listBeers(beerName, beerStyle, showInventory, pageNumber, pageSize);
     }
 
     @GetMapping(value = BEER_PATH_ID)

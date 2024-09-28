@@ -3,7 +3,9 @@ package guru.springframework.spring6restmvc.service;
 import guru.springframework.spring6restmvc.entity.Beer;
 import guru.springframework.spring6restmvc.mapper.BeerMapper;
 import guru.springframework.spring6restmvc.model.BeerDTO;
+import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.repository.BeerRepository;
+import guru.springframework.spring6restmvc.repository.specification.BeerSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,10 +25,17 @@ public class BeerServiceJPA implements BeerService {
     private final BeerMapper beerMapper;
 
     @Override
-    public List<BeerDTO> listBeers(Specification<Beer> beerSpecification, boolean showInventory) {
+    public List<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory, Integer pageNumber, Integer pageSize) {
+        Specification<Beer> beerSpecification = Specification.where(BeerSpecification.hasBeerNameLike(beerName))
+                .and(BeerSpecification.hasBeerStyle(beerStyle));
         return beerRepository.findAll(beerSpecification).stream().map(beer -> {
             BeerDTO beerDTO = beerMapper.beerToBeerDTO(beer);
-            beerDTO.setQuantityOnHand(showInventory ? beerDTO.getQuantityOnHand() : null);
+                    beerDTO.setQuantityOnHand(
+                            Optional.ofNullable(showInventory)
+                                    .filter(Boolean::booleanValue)
+                                    .map(inventory -> beerDTO.getQuantityOnHand())
+                                    .orElse(null)
+                    );
             return beerDTO;})
                 .collect(Collectors.toList());
     }

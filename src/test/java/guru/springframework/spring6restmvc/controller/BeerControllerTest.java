@@ -12,7 +12,6 @@ import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -59,7 +58,7 @@ class BeerControllerTest {
 
     @Test
     void getBeerById() throws Exception {
-        BeerDTO testBeer = beerServiceImpl.listBeers(null, true).get(0);
+        BeerDTO testBeer = beerServiceImpl.listBeers(null, null, true, 1, 25).get(0);
         given(beerService.getBeerById(testBeer.getId())).willReturn(Optional.of(testBeer));
 
         mockMvc.perform(get(BeerController.BEER_PATH_ID, testBeer.getId())
@@ -76,8 +75,8 @@ class BeerControllerTest {
 
     @Test
     void testListBeers() throws Exception {
-        List<BeerDTO> testBeers = beerServiceImpl.listBeers(null, true);
-        given(beerService.listBeers(any(Specification.class), anyBoolean())).willReturn(testBeers);
+        List<BeerDTO> testBeers = beerServiceImpl.listBeers(null, null, true, 1, 25);
+        given(beerService.listBeers(any(), any(), anyBoolean(), any(), any())).willReturn(testBeers);
         mockMvc.perform(get(BeerController.BEER_PATH)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -89,7 +88,7 @@ class BeerControllerTest {
     @Test
     void createNewBeer() throws Exception {
         // 1 Getting a Beer just get something to return
-        BeerDTO createdBeer = beerServiceImpl.listBeers(null, true).get(0);
+        BeerDTO createdBeer = beerServiceImpl.listBeers(null, null, true, 1, 25).get(0);
         // Simulation that id is null just for "save"
         BeerDTO newBeer =  BeerDTO.builder()
                 .id(null)
@@ -122,7 +121,7 @@ class BeerControllerTest {
 
     @Test
     void updateBeer()throws Exception{
-        BeerDTO bebeerDTO = beerServiceImpl.listBeers(null, true).get(0);
+        BeerDTO bebeerDTO = beerServiceImpl.listBeers(null, null, true, 1, 25).get(0);
 
         given(beerService.updateBeerById(any(), any())).willReturn(Optional.of(bebeerDTO));
         mockMvc.perform(put(BeerController.BEER_PATH_ID, bebeerDTO.getId())
@@ -135,7 +134,7 @@ class BeerControllerTest {
 
     @Test
     void updateBeerBlankName()throws Exception{
-        BeerDTO bebeerDTO = beerServiceImpl.listBeers(null, true).get(0);
+        BeerDTO bebeerDTO = beerServiceImpl.listBeers(null, null, true, 1, 25).get(0);
         bebeerDTO.setBeerName("");
         given(beerService.updateBeerById(any(), any())).willReturn(Optional.of(bebeerDTO));
         mockMvc.perform(put(BeerController.BEER_PATH_ID, bebeerDTO.getId())
@@ -151,7 +150,7 @@ class BeerControllerTest {
 
     @Test
     void deleteBeer()throws Exception{
-        BeerDTO beer = beerServiceImpl.listBeers(null, true).get(0);
+        BeerDTO beer = beerServiceImpl.listBeers(null, null, true, 1, 25).get(0);
 
         given(beerService.deleteById(any())).willReturn(true);
         mockMvc.perform(delete(BeerController.BEER_PATH_ID, beer.getId())
@@ -173,7 +172,7 @@ class BeerControllerTest {
     void createBeerNullBeerName() throws Exception {
         BeerDTO beerDTO = BeerDTO.builder().build();
 
-        given(beerService.saveBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers(null, true).get(1));
+        given(beerService.saveBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers(null, null, true, 1, 25).get(1));
         MvcResult mvcResult = mockMvc.perform(post(BeerController.BEER_PATH)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -188,7 +187,7 @@ class BeerControllerTest {
 
     @Test
     void testPatchBeer()throws Exception {
-        BeerDTO beer = beerServiceImpl.listBeers(null, true).get(0);
+        BeerDTO beer = beerServiceImpl.listBeers(null, null, true, 1, 25).get(0);
 
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name");
