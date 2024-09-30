@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -33,9 +34,17 @@ public class BootStrapData implements CommandLineRunner {
     @Transactional
     @Override
     public void run(String... args) throws Exception {
-        loadBeerData();
-        loadCsvData();
-        loadCustomerData();
+        Optional.ofNullable(beerRepository).ifPresent(repo -> {
+            loadBeerData();
+            try {
+                loadCsvData();
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        Optional.ofNullable(customerRepository).ifPresent(repo -> loadCustomerData());
+
     }
 
 

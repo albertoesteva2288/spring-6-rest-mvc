@@ -1,16 +1,20 @@
 package guru.springframework.spring6restmvc.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import guru.springframework.spring6restmvc.bootstrap.BootStrapData;
 import guru.springframework.spring6restmvc.controller.error.NotFoundException;
 import guru.springframework.spring6restmvc.entity.Beer;
 import guru.springframework.spring6restmvc.mapper.BeerMapper;
 import guru.springframework.spring6restmvc.model.BeerDTO;
 import guru.springframework.spring6restmvc.model.BeerStyle;
 import guru.springframework.spring6restmvc.repository.BeerRepository;
+import guru.springframework.spring6restmvc.service.csv.BeerCSVServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +36,7 @@ import static org.hamcrest.core.Is.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
+@Import({BootStrapData.class, BeerCSVServiceImpl.class})
 class BeerControllerIntegrationTest {
     @Autowired
     BeerController beerController;
@@ -56,7 +61,7 @@ class BeerControllerIntegrationTest {
     ObjectMapper objectMapper;
 
     @BeforeEach
-    void setUp(){
+    void setUp() throws Exception {
     mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
     }
 
@@ -135,9 +140,9 @@ class BeerControllerIntegrationTest {
 
     @Test
     void testListBeers() {
-        List<BeerDTO> beerDTOs = beerController.listBeers(null, null, true, 1, 25);
+        Page<BeerDTO> beerDTOs = beerController.listBeers(null, null, true, 1, 25);
         //assertThat(beerDTOs.size()).isEqualTo(3);
-        assertThat(beerDTOs.size()).isEqualTo(beerRepository.count());
+        assertThat(beerDTOs.stream().count()).isEqualTo(25L);
 
     }
 
@@ -146,9 +151,9 @@ class BeerControllerIntegrationTest {
     @Test
     void testEmptyListBeers() {
         beerRepository.deleteAll();
-        List<BeerDTO> beerDTOs = beerController.listBeers(null, null, true, 1, 25);
-        assertThat(beerDTOs.size()).isEqualTo(0);
-        assertThat(beerDTOs.size()).isEqualTo(beerRepository.count());
+        Page<BeerDTO> beerDTOs = beerController.listBeers(null, null, true, 1, 25);
+        assertThat(beerDTOs.stream().count()).isEqualTo(0);
+        assertThat(beerDTOs.stream().count()).isEqualTo(beerRepository.count());
 
     }
 
@@ -194,8 +199,10 @@ class BeerControllerIntegrationTest {
     @Test
     void testListBeerByName() throws Exception {
         mockMvc.perform(get(BeerController.BEER_PATH)
-                .queryParam("beerName", "IPA"))
+                .queryParam("beerName", "IPA")
+                .queryParam("pageNumber", "0")
+                .queryParam("pageSize", "25"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", is(336)));
+                .andExpect(jsonPath("$.size()", is(11)));
     }
 }
