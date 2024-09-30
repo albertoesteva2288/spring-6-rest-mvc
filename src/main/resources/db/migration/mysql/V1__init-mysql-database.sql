@@ -2,23 +2,23 @@ drop table if exists beer;
 drop table if exists customer;
 create table beer
 (
-    beer_style       smallint       not null,
-    created_date     datetime,
-    price            decimal(38, 2) not null,
-    quantity_on_hand integer,
-    updated_date     datetime,
-    version          integer,
     id               varchar(36)    not null,
     beer_name        varchar(50)    not null,
+    beer_style       smallint       not null,
+    price            decimal(38, 2) not null,
+    quantity_on_hand integer,
+    version          integer,
     upc              varchar(255)   not null,
+    created_date     datetime(6),
+    updated_date     datetime(6),
     primary key (id)
 ) engine = InnoDB;
 create table customer
 (
-    created_date  datetime,
-    updated_date  datetime,
-    version       integer,
     id            varchar(36) not null,
     customer_name varchar(50) not null,
+    version       integer,
+    created_date  datetime(6),
+    updated_date  datetime(6),
     primary key (id)
 ) engine = InnoDB;
