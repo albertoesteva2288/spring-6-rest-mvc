@@ -40,17 +40,15 @@ public class BeerServiceJPA implements BeerService {
                 Optional.ofNullable(pageSize).orElse(DEFAULT_PAGE_SIZE),
                 sort);
 
-
-
         Page<Beer> beerPage = beerRepository.findAll(beerSpecification, pageable);
 
         return beerPage.map(beer -> {
             BeerDTO beerDTO = beerMapper.beerToBeerDTO(beer);
             beerDTO.setQuantityOnHand(
-                    Optional.ofNullable(showInventory)
-                            .filter(Boolean::booleanValue)
-                            .map(inventory -> beer.getQuantityOnHand())
-                            .orElse(null)
+                Optional.ofNullable(showInventory)
+                    .filter(Boolean::booleanValue)
+                    .map(inventory -> beer.getQuantityOnHand())
+                    .orElse(null)
             );
             return beerDTO;
         });
