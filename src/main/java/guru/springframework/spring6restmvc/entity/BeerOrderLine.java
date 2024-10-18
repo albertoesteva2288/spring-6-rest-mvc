@@ -36,6 +36,10 @@ public class BeerOrderLine {
     private LocalDateTime createdDate;
     @UpdateTimestamp
     private LocalDateTime updatedDate;
+    @ManyToOne
+    private Beer beer;
+    @ManyToOne
+    private BeerOrder beerOrder;
 
     public boolean isNew() {
         return this.id == null;

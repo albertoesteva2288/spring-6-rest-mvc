@@ -9,6 +9,7 @@ import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -25,17 +26,23 @@ public class BeerOrder {
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
+
     @Version
     private Integer version;
+
     @Column(name = "customer_ref")
     private String customerRef;
 
     @ManyToOne
     private Customer customer;
 
+    @OneToMany(mappedBy = "beerOrder")
+    private Set<BeerOrderLine> beerOrderLines;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdDate;
+
     @UpdateTimestamp
     private LocalDateTime updatedDate;
 

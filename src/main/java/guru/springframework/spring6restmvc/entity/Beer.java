@@ -14,6 +14,7 @@ import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -32,8 +33,10 @@ public class Beer {
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
     private UUID id;
+
     @Version
     private Integer version;
+
     @NotBlank
     @NotNull
     // @Size: This validation occurs before attempting to persist the data, at the application layer level.
@@ -41,19 +44,28 @@ public class Beer {
     //@Column: This applies at the persistence layer (database) level.
     @Column(length = 50)
     private String beerName;
+
     @NotNull
     @JdbcTypeCode(SqlTypes.SMALLINT)
     private BeerStyle beerStyle;
+
     @NotNull
     @NotBlank
     @Size(max = 255)
     private String upc;
+
     private Integer quantityOnHand;
+
     @NotNull
     private BigDecimal price;
+
+    @OneToMany(mappedBy = "beer")
+    private Set<BeerOrderLine> beerOrderLines;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdDate;
+
     @UpdateTimestamp
     private LocalDateTime updatedDate;
 
