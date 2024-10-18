@@ -15,11 +15,21 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "beer_order")
 public class BeerOrder {
+
+    public BeerOrder(UUID id, Integer version, String customerRef, Customer customer, Set<BeerOrderLine> beerOrderLines, LocalDateTime createdDate, LocalDateTime updatedDate) {
+        this.id = id;
+        this.version = version;
+        this.customerRef = customerRef;
+        this.setCustomer(customer);
+        this.beerOrderLines = beerOrderLines;
+        this.createdDate = createdDate;
+        this.updatedDate = updatedDate;
+    }
+
     @Id
     @GeneratedValue(generator = "UUID")
     @UuidGenerator
@@ -35,6 +45,11 @@ public class BeerOrder {
 
     @ManyToOne
     private Customer customer;
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+        customer.getBeerOrders().add(this);
+    }
 
     @OneToMany(mappedBy = "beerOrder")
     private Set<BeerOrderLine> beerOrderLines;
