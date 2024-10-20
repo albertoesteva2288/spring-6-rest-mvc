@@ -62,6 +62,15 @@ public class Beer {
     @OneToMany(mappedBy = "beer")
     private Set<BeerOrderLine> beerOrderLines;
 
+    // Using this approach to make the many-to-many relationship,
+    // we cannot add more fields to give more details between Beer and Category
+    // The order of the JoinColumns depends on the class we are in
+    @ManyToMany
+    @JoinTable(name = "beer_category",
+            joinColumns = @JoinColumn(name = "beer_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdDate;
