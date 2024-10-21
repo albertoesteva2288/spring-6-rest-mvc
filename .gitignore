@@ -35,3 +35,5 @@ build/
 
 ### This Project ###
 /src/scripts/drop-and-create.sql
+/data/restdbh2.mv.db
+/data/restdbh2.trace.db
