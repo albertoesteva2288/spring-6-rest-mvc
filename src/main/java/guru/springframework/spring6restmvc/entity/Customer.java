@@ -43,7 +43,7 @@ public class Customer {
     @Size(max = 50)
     private String customerName;
     @Version
-    private Integer version;
+    private Integer version = 0;
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdDate;

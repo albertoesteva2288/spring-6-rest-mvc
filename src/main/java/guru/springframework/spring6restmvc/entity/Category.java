@@ -1,10 +1,7 @@
 package guru.springframework.spring6restmvc.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -12,9 +9,11 @@ import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -31,7 +30,7 @@ public class Category {
     private String description;
 
     @Version
-    private Integer version;
+    private Integer version = 0;
 
     @CreationTimestamp
     @Column(updatable = false)
@@ -40,8 +39,9 @@ public class Category {
     @UpdateTimestamp
     private Timestamp updatedDate;
 
+    @Builder.Default
     @ManyToMany(mappedBy = "categories")
-    private Set<Beer> beers;
+    private Set<Beer> beers = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

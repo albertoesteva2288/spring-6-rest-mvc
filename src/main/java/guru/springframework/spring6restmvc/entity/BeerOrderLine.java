@@ -30,7 +30,7 @@ public class BeerOrderLine {
     private Integer quantityAllocated = 0;
 
     @Version
-    private Integer version;
+    private Integer version = 0;
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdDate;

@@ -38,7 +38,7 @@ public class BeerOrder {
     private UUID id;
 
     @Version
-    private Integer version;
+    private Integer version = 0;
 
     @Column(name = "customer_ref")
     private String customerRef;
