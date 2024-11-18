@@ -14,6 +14,7 @@ import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,7 +36,7 @@ public class Beer {
     private UUID id;
 
     @Version
-    private Integer version;
+    private Integer version = 0;
 
     @NotBlank
     @NotNull
@@ -65,11 +66,22 @@ public class Beer {
     // Using this approach to make the many-to-many relationship,
     // we cannot add more fields to give more details between Beer and Category
     // The order of the JoinColumns depends on the class we are in
+    @Builder.Default
     @ManyToMany
     @JoinTable(name = "beer_category",
             joinColumns = @JoinColumn(name = "beer_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> categories;
+    private Set<Category> categories = new HashSet<>();
+
+    public void addCategory(Category category) {
+        this.getCategories().add(category);
+        category.getBeers().add(this);
+    }
+
+    public void removeCategory(Category category) {
+        this.getCategories().remove(category);
+        category.getBeers().remove(this);
+    }
 
     @CreationTimestamp
     @Column(updatable = false)
